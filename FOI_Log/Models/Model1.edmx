@@ -1,0 +1,584 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FOI_LOGModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="FOI">
+          <Key>
+            <PropertyRef Name="FOI_Ref" />
+          </Key>
+          <Property Name="FOI_Ref" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FOI_Received" Type="date" />
+          <Property Name="NGH_FOI_REF" Type="nvarchar" MaxLength="41" StoreGeneratedPattern="Computed" />
+          <Property Name="First_IG_Team_Chase" Type="date" />
+          <Property Name="Information_Received_From_Department" Type="date" />
+          <Property Name="Response_Sent_to_Requestor" Type="date" />
+          <Property Name="Association_or_Previous_Request" Type="nvarchar(max)" />
+          <Property Name="Requestor_Name" Type="nvarchar(max)" />
+          <Property Name="Requestor_Email" Type="nvarchar(max)" />
+          <Property Name="Information_Sought" Type="nvarchar(max)" />
+          <Property Name="Comments" Type="nvarchar(max)" />
+          <Property Name="Status_Code" Type="int" />
+          <Property Name="Area_of_Interest_Code" Type="int" />
+          <Property Name="Created_By" Type="nvarchar(max)" />
+          <Property Name="Created_Date" Type="datetime" />
+          <Property Name="Updated_By" Type="nvarchar(max)" />
+          <Property Name="Updated_Date" Type="datetime" />
+          <Property Name="Deleted_By" Type="nvarchar(max)" />
+          <Property Name="Deleted_Date" Type="datetime" />
+          <Property Name="Head_DQSP_Approval" Type="nvarchar(max)" />
+          <Property Name="DSQP_Approved_Date" Type="date" />
+          <Property Name="Director_Approval" Type="nvarchar(max)" />
+          <Property Name="Director_Approval_Date" Type="date" />
+          <Property Name="Target_Date_Of_Repsonse" Type="date" />
+          <Property Name="Date_Department_Due_To_Respond" Type="date" />
+          <Property Name="Completed_Flag" Type="bit" />
+          <Property Name="Uploaded_Document_Path" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FOI_Department">
+          <Key>
+            <PropertyRef Name="FOI_Department_Code" />
+          </Key>
+          <Property Name="FOI_Department_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FOI_Ref" Type="int" />
+          <Property Name="Department_Code" Type="int" />
+          <Property Name="Date_Department_Due_To_Respond" Type="date" />
+          <Property Name="First_IG_Team_Chase" Type="date" />
+          <Property Name="Information_Received_From_Department" Type="date" />
+        </EntityType>
+        <EntityType Name="Ref_Area_of_Interest">
+          <Key>
+            <PropertyRef Name="Interest_Code" />
+          </Key>
+          <Property Name="Interest_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Area_of_Interest" Type="nvarchar(max)" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Ref_Department">
+          <Key>
+            <PropertyRef Name="Department_Code" />
+          </Key>
+          <Property Name="Department_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Department" Type="nvarchar(max)" />
+          <Property Name="Days_to_Respond" Type="int" />
+          <Property Name="Department_Email" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Ref_Department_Directors_Email">
+          <Key>
+            <PropertyRef Name="Email_Code" />
+          </Key>
+          <Property Name="Email_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email_Address" Type="nvarchar(max)" />
+          <Property Name="Department_Code" Type="int" />
+        </EntityType>
+        <EntityType Name="Ref_Department_Managers_Email">
+          <Key>
+            <PropertyRef Name="Email_Code" />
+          </Key>
+          <Property Name="Email_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email_Address" Type="nvarchar(max)" />
+          <Property Name="Department_Code" Type="int" />
+        </EntityType>
+        <EntityType Name="Ref_Status">
+          <Key>
+            <PropertyRef Name="Status_Code" />
+          </Key>
+          <Property Name="Status_Code" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status_Description" Type="nvarchar(max)" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <Association Name="FK_FOI_Department_FOI">
+          <End Role="FOI" Type="Self.FOI" Multiplicity="0..1" />
+          <End Role="FOI_Department" Type="Self.FOI_Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FOI">
+              <PropertyRef Name="FOI_Ref" />
+            </Principal>
+            <Dependent Role="FOI_Department">
+              <PropertyRef Name="FOI_Ref" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FOI_Department_Ref_Department">
+          <End Role="Ref_Department" Type="Self.Ref_Department" Multiplicity="0..1" />
+          <End Role="FOI_Department" Type="Self.FOI_Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Department">
+              <PropertyRef Name="Department_Code" />
+            </Principal>
+            <Dependent Role="FOI_Department">
+              <PropertyRef Name="Department_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FOI_Ref_Area_of_Interest">
+          <End Role="Ref_Area_of_Interest" Type="Self.Ref_Area_of_Interest" Multiplicity="0..1" />
+          <End Role="FOI" Type="Self.FOI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Area_of_Interest">
+              <PropertyRef Name="Interest_Code" />
+            </Principal>
+            <Dependent Role="FOI">
+              <PropertyRef Name="Area_of_Interest_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FOI_Ref_Status">
+          <End Role="Ref_Status" Type="Self.Ref_Status" Multiplicity="0..1" />
+          <End Role="FOI" Type="Self.FOI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Status">
+              <PropertyRef Name="Status_Code" />
+            </Principal>
+            <Dependent Role="FOI">
+              <PropertyRef Name="Status_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ref_Department_Directors_Email_Ref_Department">
+          <End Role="Ref_Department" Type="Self.Ref_Department" Multiplicity="0..1" />
+          <End Role="Ref_Department_Directors_Email" Type="Self.Ref_Department_Directors_Email" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Department">
+              <PropertyRef Name="Department_Code" />
+            </Principal>
+            <Dependent Role="Ref_Department_Directors_Email">
+              <PropertyRef Name="Department_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ref_Department_Managers_Email_Ref_Department">
+          <End Role="Ref_Department" Type="Self.Ref_Department" Multiplicity="0..1" />
+          <End Role="Ref_Department_Managers_Email" Type="Self.Ref_Department_Managers_Email" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Department">
+              <PropertyRef Name="Department_Code" />
+            </Principal>
+            <Dependent Role="Ref_Department_Managers_Email">
+              <PropertyRef Name="Department_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SP_UPDATE_FOI_DEPARTMENTS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FOIREF" Type="int" Mode="In" />
+          <Parameter Name="DepartmentCode" Type="int" Mode="In" />
+          <Parameter Name="First_IG_Team_Chase" Type="date" Mode="In" />
+          <Parameter Name="Information_Recieved_From_Department" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SP_UPDATE_FOI_LOG" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FOI_Received" Type="date" Mode="In" />
+          <Parameter Name="First_IG_Team_Chase" Type="date" Mode="In" />
+          <Parameter Name="Information_Received_From_Department" Type="date" Mode="In" />
+          <Parameter Name="Response_Sent_to_Requestor" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Association_or_Previous_Request" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Requestor_Name" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Requestor_Email" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Information_Sought" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Comments" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Status_Code" Type="int" Mode="In" />
+          <Parameter Name="Area_of_Interest_Code" Type="int" Mode="In" />
+          <Parameter Name="Created_By" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Created_Date" Type="date" Mode="In" />
+          <Parameter Name="Updated_By" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Updated_Date" Type="date" Mode="In" />
+          <Parameter Name="Deleted_By" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Deleted_Date" Type="date" Mode="In" />
+          <Parameter Name="Head_DQSP_Approval" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="DSQP_Approved_Date" Type="date" Mode="In" />
+          <Parameter Name="Director_Approval" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Director_Approval_Date" Type="date" Mode="In" />
+          <Parameter Name="Completed_Flag" Type="bit" Mode="In" />
+        </Function>
+        <EntityContainer Name="FOI_LOGModelStoreContainer">
+          <EntitySet Name="FOI" EntityType="Self.FOI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FOI_Department" EntityType="Self.FOI_Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ref_Area_of_Interest" EntityType="Self.Ref_Area_of_Interest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ref_Department" EntityType="Self.Ref_Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ref_Department_Directors_Email" EntityType="Self.Ref_Department_Directors_Email" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ref_Department_Managers_Email" EntityType="Self.Ref_Department_Managers_Email" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ref_Status" EntityType="Self.Ref_Status" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_FOI_Department_FOI" Association="Self.FK_FOI_Department_FOI">
+            <End Role="FOI" EntitySet="FOI" />
+            <End Role="FOI_Department" EntitySet="FOI_Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FOI_Department_Ref_Department" Association="Self.FK_FOI_Department_Ref_Department">
+            <End Role="Ref_Department" EntitySet="Ref_Department" />
+            <End Role="FOI_Department" EntitySet="FOI_Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FOI_Ref_Area_of_Interest" Association="Self.FK_FOI_Ref_Area_of_Interest">
+            <End Role="Ref_Area_of_Interest" EntitySet="Ref_Area_of_Interest" />
+            <End Role="FOI" EntitySet="FOI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FOI_Ref_Status" Association="Self.FK_FOI_Ref_Status">
+            <End Role="Ref_Status" EntitySet="Ref_Status" />
+            <End Role="FOI" EntitySet="FOI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ref_Department_Directors_Email_Ref_Department" Association="Self.FK_Ref_Department_Directors_Email_Ref_Department">
+            <End Role="Ref_Department" EntitySet="Ref_Department" />
+            <End Role="Ref_Department_Directors_Email" EntitySet="Ref_Department_Directors_Email" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ref_Department_Managers_Email_Ref_Department" Association="Self.FK_Ref_Department_Managers_Email_Ref_Department">
+            <End Role="Ref_Department" EntitySet="Ref_Department" />
+            <End Role="Ref_Department_Managers_Email" EntitySet="Ref_Department_Managers_Email" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FOI_LOGModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="FOI">
+          <Key>
+            <PropertyRef Name="FOI_Ref" />
+          </Key>
+          <Property Name="FOI_Ref" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FOI_Received" Type="DateTime" Precision="0" />
+          <Property Name="NGH_FOI_REF" Type="String" MaxLength="41" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="First_IG_Team_Chase" Type="DateTime" Precision="0" />
+          <Property Name="Information_Received_From_Department" Type="DateTime" Precision="0" />
+          <Property Name="Response_Sent_to_Requestor" Type="DateTime" Precision="0" />
+          <Property Name="Association_or_Previous_Request" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Information_Sought" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status_Code" Type="Int32" />
+          <Property Name="Area_of_Interest_Code" Type="Int32" />
+          <Property Name="Created_By" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Created_Date" Type="DateTime" Precision="3" />
+          <Property Name="Updated_By" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Updated_Date" Type="DateTime" Precision="3" />
+          <Property Name="Deleted_By" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Deleted_Date" Type="DateTime" Precision="3" />
+          <Property Name="Head_DQSP_Approval" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DSQP_Approved_Date" Type="DateTime" Precision="0" />
+          <Property Name="Director_Approval" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Director_Approval_Date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="FOI_Department" Relationship="Self.FK_FOI_Department_FOI" FromRole="FOI" ToRole="FOI_Department" />
+          <NavigationProperty Name="Ref_Area_of_Interest" Relationship="Self.FK_FOI_Ref_Area_of_Interest" FromRole="FOI" ToRole="Ref_Area_of_Interest" />
+          <Property Name="Target_Date_Of_Repsonse" Type="DateTime" Precision="0" />
+          <Property Name="Date_Department_Due_To_Respond" Type="DateTime" Precision="0" />
+          <Property Name="Completed_Flag" Type="Boolean" />
+          <Property Name="Requestor_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Requestor_Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Ref_Status" Relationship="FOI_LOGModel.FK_FOI_Ref_Status" FromRole="FOI" ToRole="Ref_Status" />
+          <Property Name="Uploaded_Document_Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FOI_Department">
+          <Key>
+            <PropertyRef Name="FOI_Department_Code" />
+          </Key>
+          <Property Name="FOI_Department_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FOI_Ref" Type="Int32" />
+          <Property Name="Department_Code" Type="Int32" />
+          <NavigationProperty Name="FOI" Relationship="Self.FK_FOI_Department_FOI" FromRole="FOI_Department" ToRole="FOI" />
+          <NavigationProperty Name="Ref_Department" Relationship="Self.FK_FOI_Department_Ref_Department" FromRole="FOI_Department" ToRole="Ref_Department" />
+          <Property Name="Date_Department_Due_To_Respond" Type="DateTime" Precision="0" />
+          <Property Name="First_IG_Team_Chase" Type="DateTime" Precision="0" />
+          <Property Name="Information_Received_From_Department" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="Ref_Area_of_Interest">
+          <Key>
+            <PropertyRef Name="Interest_Code" />
+          </Key>
+          <Property Name="Interest_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Area_of_Interest" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FOIs" Relationship="Self.FK_FOI_Ref_Area_of_Interest" FromRole="Ref_Area_of_Interest" ToRole="FOI" />
+          <Property Name="Active" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Ref_Department">
+          <Key>
+            <PropertyRef Name="Department_Code" />
+          </Key>
+          <Property Name="Department_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Department" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Days_to_Respond" Type="Int32" />
+          <Property Name="Department_Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FOI_Department" Relationship="Self.FK_FOI_Department_Ref_Department" FromRole="Ref_Department" ToRole="FOI_Department" />
+          <NavigationProperty Name="Ref_Department_Directors_Email" Relationship="Self.FK_Ref_Department_Directors_Email_Ref_Department" FromRole="Ref_Department" ToRole="Ref_Department_Directors_Email" />
+          <NavigationProperty Name="Ref_Department_Managers_Email" Relationship="Self.FK_Ref_Department_Managers_Email_Ref_Department" FromRole="Ref_Department" ToRole="Ref_Department_Managers_Email" />
+        </EntityType>
+        <EntityType Name="Ref_Department_Directors_Email">
+          <Key>
+            <PropertyRef Name="Email_Code" />
+          </Key>
+          <Property Name="Email_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email_Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Code" Type="Int32" />
+          <NavigationProperty Name="Ref_Department" Relationship="Self.FK_Ref_Department_Directors_Email_Ref_Department" FromRole="Ref_Department_Directors_Email" ToRole="Ref_Department" />
+        </EntityType>
+        <EntityType Name="Ref_Department_Managers_Email">
+          <Key>
+            <PropertyRef Name="Email_Code" />
+          </Key>
+          <Property Name="Email_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email_Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Department_Code" Type="Int32" />
+          <NavigationProperty Name="Ref_Department" Relationship="Self.FK_Ref_Department_Managers_Email_Ref_Department" FromRole="Ref_Department_Managers_Email" ToRole="Ref_Department" />
+        </EntityType>
+        <Association Name="FK_FOI_Department_FOI">
+          <End Role="FOI" Type="Self.FOI" Multiplicity="0..1" />
+          <End Role="FOI_Department" Type="Self.FOI_Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FOI">
+              <PropertyRef Name="FOI_Ref" />
+            </Principal>
+            <Dependent Role="FOI_Department">
+              <PropertyRef Name="FOI_Ref" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FOI_Ref_Area_of_Interest">
+          <End Role="Ref_Area_of_Interest" Type="Self.Ref_Area_of_Interest" Multiplicity="0..1" />
+          <End Role="FOI" Type="Self.FOI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Area_of_Interest">
+              <PropertyRef Name="Interest_Code" />
+            </Principal>
+            <Dependent Role="FOI">
+              <PropertyRef Name="Area_of_Interest_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FOI_Department_Ref_Department">
+          <End Role="Ref_Department" Type="Self.Ref_Department" Multiplicity="0..1" />
+          <End Role="FOI_Department" Type="Self.FOI_Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Department">
+              <PropertyRef Name="Department_Code" />
+            </Principal>
+            <Dependent Role="FOI_Department">
+              <PropertyRef Name="Department_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ref_Department_Directors_Email_Ref_Department">
+          <End Role="Ref_Department" Type="Self.Ref_Department" Multiplicity="0..1" />
+          <End Role="Ref_Department_Directors_Email" Type="Self.Ref_Department_Directors_Email" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Department">
+              <PropertyRef Name="Department_Code" />
+            </Principal>
+            <Dependent Role="Ref_Department_Directors_Email">
+              <PropertyRef Name="Department_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ref_Department_Managers_Email_Ref_Department">
+          <End Role="Ref_Department" Type="Self.Ref_Department" Multiplicity="0..1" />
+          <End Role="Ref_Department_Managers_Email" Type="Self.Ref_Department_Managers_Email" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Department">
+              <PropertyRef Name="Department_Code" />
+            </Principal>
+            <Dependent Role="Ref_Department_Managers_Email">
+              <PropertyRef Name="Department_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FOI_LOGEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="FOIs" EntityType="Self.FOI" />
+          <EntitySet Name="FOI_Department" EntityType="Self.FOI_Department" />
+          <EntitySet Name="Ref_Area_of_Interest" EntityType="Self.Ref_Area_of_Interest" />
+          <EntitySet Name="Ref_Department" EntityType="Self.Ref_Department" />
+          <EntitySet Name="Ref_Department_Directors_Email" EntityType="Self.Ref_Department_Directors_Email" />
+          <EntitySet Name="Ref_Department_Managers_Email" EntityType="Self.Ref_Department_Managers_Email" />
+          <AssociationSet Name="FK_FOI_Department_FOI" Association="Self.FK_FOI_Department_FOI">
+            <End Role="FOI" EntitySet="FOIs" />
+            <End Role="FOI_Department" EntitySet="FOI_Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FOI_Ref_Area_of_Interest" Association="Self.FK_FOI_Ref_Area_of_Interest">
+            <End Role="Ref_Area_of_Interest" EntitySet="Ref_Area_of_Interest" />
+            <End Role="FOI" EntitySet="FOIs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FOI_Department_Ref_Department" Association="Self.FK_FOI_Department_Ref_Department">
+            <End Role="Ref_Department" EntitySet="Ref_Department" />
+            <End Role="FOI_Department" EntitySet="FOI_Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ref_Department_Directors_Email_Ref_Department" Association="Self.FK_Ref_Department_Directors_Email_Ref_Department">
+            <End Role="Ref_Department" EntitySet="Ref_Department" />
+            <End Role="Ref_Department_Directors_Email" EntitySet="Ref_Department_Directors_Email" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ref_Department_Managers_Email_Ref_Department" Association="Self.FK_Ref_Department_Managers_Email_Ref_Department">
+            <End Role="Ref_Department" EntitySet="Ref_Department" />
+            <End Role="Ref_Department_Managers_Email" EntitySet="Ref_Department_Managers_Email" />
+          </AssociationSet>
+          <FunctionImport Name="SP_UPDATE_FOI_DEPARTMENTS">
+            <Parameter Name="FOIREF" Mode="In" Type="Int32" />
+            <Parameter Name="DepartmentCode" Mode="In" Type="Int32" />
+            <Parameter Name="First_IG_Team_Chase" Mode="In" Type="DateTime" />
+            <Parameter Name="Information_Recieved_From_Department" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_UPDATE_FOI_LOG">
+            <Parameter Name="FOI_Received" Mode="In" Type="DateTime" />
+            <Parameter Name="First_IG_Team_Chase" Mode="In" Type="DateTime" />
+            <Parameter Name="Information_Received_From_Department" Mode="In" Type="DateTime" />
+            <Parameter Name="Response_Sent_to_Requestor" Mode="In" Type="String" />
+            <Parameter Name="Association_or_Previous_Request" Mode="In" Type="String" />
+            <Parameter Name="Requestor_Name" Mode="In" Type="String" />
+            <Parameter Name="Requestor_Email" Mode="In" Type="String" />
+            <Parameter Name="Information_Sought" Mode="In" Type="String" />
+            <Parameter Name="Comments" Mode="In" Type="String" />
+            <Parameter Name="Status_Code" Mode="In" Type="Int32" />
+            <Parameter Name="Area_of_Interest_Code" Mode="In" Type="Int32" />
+            <Parameter Name="Created_By" Mode="In" Type="String" />
+            <Parameter Name="Created_Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Updated_By" Mode="In" Type="String" />
+            <Parameter Name="Updated_Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Deleted_By" Mode="In" Type="String" />
+            <Parameter Name="Deleted_Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Head_DQSP_Approval" Mode="In" Type="String" />
+            <Parameter Name="DSQP_Approved_Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Director_Approval" Mode="In" Type="String" />
+            <Parameter Name="Director_Approval_Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Completed_Flag" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="Ref_Status" EntityType="FOI_LOGModel.Ref_Status" />
+          <AssociationSet Name="FK_FOI_Ref_Status" Association="FOI_LOGModel.FK_FOI_Ref_Status">
+            <End Role="Ref_Status" EntitySet="Ref_Status" />
+            <End Role="FOI" EntitySet="FOIs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Ref_Status">
+          <Key>
+            <PropertyRef Name="Status_Code" />
+          </Key>
+          <Property Name="Status_Code" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FOIs" Relationship="FOI_LOGModel.FK_FOI_Ref_Status" FromRole="Ref_Status" ToRole="FOI" />
+          <Property Name="Active" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_FOI_Ref_Status">
+          <End Type="FOI_LOGModel.Ref_Status" Role="Ref_Status" Multiplicity="0..1" />
+          <End Type="FOI_LOGModel.FOI" Role="FOI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ref_Status">
+              <PropertyRef Name="Status_Code" />
+            </Principal>
+            <Dependent Role="FOI">
+              <PropertyRef Name="Status_Code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FOI_LOGModelStoreContainer" CdmEntityContainer="FOI_LOGEntities">
+          <EntitySetMapping Name="FOIs">
+            <EntityTypeMapping TypeName="FOI_LOGModel.FOI">
+              <MappingFragment StoreEntitySet="FOI">
+                <ScalarProperty Name="Uploaded_Document_Path" ColumnName="Uploaded_Document_Path" />
+                <ScalarProperty Name="Requestor_Email" ColumnName="Requestor_Email" />
+                <ScalarProperty Name="Requestor_Name" ColumnName="Requestor_Name" />
+                <ScalarProperty Name="Completed_Flag" ColumnName="Completed_Flag" />
+                <ScalarProperty Name="Date_Department_Due_To_Respond" ColumnName="Date_Department_Due_To_Respond" />
+                <ScalarProperty Name="Target_Date_Of_Repsonse" ColumnName="Target_Date_Of_Repsonse" />
+                <ScalarProperty Name="FOI_Ref" ColumnName="FOI_Ref" />
+                <ScalarProperty Name="FOI_Received" ColumnName="FOI_Received" />
+                <ScalarProperty Name="NGH_FOI_REF" ColumnName="NGH_FOI_REF" />
+                <ScalarProperty Name="First_IG_Team_Chase" ColumnName="First_IG_Team_Chase" />
+                <ScalarProperty Name="Information_Received_From_Department" ColumnName="Information_Received_From_Department" />
+                <ScalarProperty Name="Response_Sent_to_Requestor" ColumnName="Response_Sent_to_Requestor" />
+                <ScalarProperty Name="Association_or_Previous_Request" ColumnName="Association_or_Previous_Request" />
+                <ScalarProperty Name="Information_Sought" ColumnName="Information_Sought" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Status_Code" ColumnName="Status_Code" />
+                <ScalarProperty Name="Area_of_Interest_Code" ColumnName="Area_of_Interest_Code" />
+                <ScalarProperty Name="Created_By" ColumnName="Created_By" />
+                <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+                <ScalarProperty Name="Updated_By" ColumnName="Updated_By" />
+                <ScalarProperty Name="Updated_Date" ColumnName="Updated_Date" />
+                <ScalarProperty Name="Deleted_By" ColumnName="Deleted_By" />
+                <ScalarProperty Name="Deleted_Date" ColumnName="Deleted_Date" />
+                <ScalarProperty Name="Head_DQSP_Approval" ColumnName="Head_DQSP_Approval" />
+                <ScalarProperty Name="DSQP_Approved_Date" ColumnName="DSQP_Approved_Date" />
+                <ScalarProperty Name="Director_Approval" ColumnName="Director_Approval" />
+                <ScalarProperty Name="Director_Approval_Date" ColumnName="Director_Approval_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FOI_Department">
+            <EntityTypeMapping TypeName="FOI_LOGModel.FOI_Department">
+              <MappingFragment StoreEntitySet="FOI_Department">
+                <ScalarProperty Name="Information_Received_From_Department" ColumnName="Information_Received_From_Department" />
+                <ScalarProperty Name="First_IG_Team_Chase" ColumnName="First_IG_Team_Chase" />
+                <ScalarProperty Name="Date_Department_Due_To_Respond" ColumnName="Date_Department_Due_To_Respond" />
+                <ScalarProperty Name="FOI_Department_Code" ColumnName="FOI_Department_Code" />
+                <ScalarProperty Name="FOI_Ref" ColumnName="FOI_Ref" />
+                <ScalarProperty Name="Department_Code" ColumnName="Department_Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ref_Area_of_Interest">
+            <EntityTypeMapping TypeName="FOI_LOGModel.Ref_Area_of_Interest">
+              <MappingFragment StoreEntitySet="Ref_Area_of_Interest">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Interest_Code" ColumnName="Interest_Code" />
+                <ScalarProperty Name="Area_of_Interest" ColumnName="Area_of_Interest" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ref_Department">
+            <EntityTypeMapping TypeName="FOI_LOGModel.Ref_Department">
+              <MappingFragment StoreEntitySet="Ref_Department">
+                <ScalarProperty Name="Department_Code" ColumnName="Department_Code" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Days_to_Respond" ColumnName="Days_to_Respond" />
+                <ScalarProperty Name="Department_Email" ColumnName="Department_Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ref_Department_Directors_Email">
+            <EntityTypeMapping TypeName="FOI_LOGModel.Ref_Department_Directors_Email">
+              <MappingFragment StoreEntitySet="Ref_Department_Directors_Email">
+                <ScalarProperty Name="Email_Code" ColumnName="Email_Code" />
+                <ScalarProperty Name="Email_Address" ColumnName="Email_Address" />
+                <ScalarProperty Name="Department_Code" ColumnName="Department_Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ref_Department_Managers_Email">
+            <EntityTypeMapping TypeName="FOI_LOGModel.Ref_Department_Managers_Email">
+              <MappingFragment StoreEntitySet="Ref_Department_Managers_Email">
+                <ScalarProperty Name="Email_Code" ColumnName="Email_Code" />
+                <ScalarProperty Name="Email_Address" ColumnName="Email_Address" />
+                <ScalarProperty Name="Department_Code" ColumnName="Department_Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_UPDATE_FOI_DEPARTMENTS" FunctionName="FOI_LOGModel.Store.SP_UPDATE_FOI_DEPARTMENTS" />
+          <FunctionImportMapping FunctionImportName="SP_UPDATE_FOI_LOG" FunctionName="FOI_LOGModel.Store.SP_UPDATE_FOI_LOG" />
+          <EntitySetMapping Name="Ref_Status">
+            <EntityTypeMapping TypeName="FOI_LOGModel.Ref_Status">
+              <MappingFragment StoreEntitySet="Ref_Status">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Status_Description" ColumnName="Status_Description" />
+                <ScalarProperty Name="Status_Code" ColumnName="Status_Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

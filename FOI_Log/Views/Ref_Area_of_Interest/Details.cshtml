@@ -1,0 +1,25 @@
+﻿@model FOI_Log.Models.Ref_Area_of_Interest
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details - Area Of Interest</h2>
+<hr />
+<div>
+  
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Area_of_Interest)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Area_of_Interest)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    
+    @Html.ActionLink("Back to List", "Index", null, new { style = "color:White", @class = "btn btn-warning" })
+</p>

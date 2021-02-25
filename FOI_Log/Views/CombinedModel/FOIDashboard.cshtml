@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "FOIDashboard";
+   // Layout = "~/Views/Shared/DashboardLayout.cshtml";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+<style>
+    .btn {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white !important;
+        padding: 50px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 20px 20px;
+        cursor: pointer;
+        border-radius: 12px;
+    }
+    a:link {
+        color: white;
+        text-decoration: none;
+    }
+    a:hover {
+        font-weight: bold;
+    }
+</style>
+
+<div class="row">
+    <a href="@Url.Action("FOICreate")" style="color:white">
+        <div class="col-lg-3 col-6 btn" style="background-color:#009688">
+
+
+            Create New FOI
+
+
+
+        </div>
+    </a>
+    <div class="col-lg-3 col-6 btn" style="background-color:#007479">
+
+
+        <a href="@Url.Action("FOIList")" style="color:white">
+            Manage FOI (Edit/View/Delete)
+        </a>
+
+
+    </div>
+    <div class="col-lg-3 col-6 btn" style="background-color:#13BEC1">
+
+        <a href="@Url.Action("ResendEmails")" style="color:white">
+
+            Resend Emails to Departments
+
+        </a>
+
+
+    </div>
+    <div class="col-lg-3 col-6 btn" style="background-color:#4a4e69">
+
+        <a href="@Url.Action("ManageManagers")" style="color:white">
+
+            Need DQSP Approval
+
+        </a>
+
+    </div>
+    <div class="col-lg-3 col-6 btn" style="background-color:#9a8c98">
+
+        <a href="@Url.Action("ManageManagers")" style="color:white">
+
+            Aproved FOIs by DQSP
+
+        </a>
+
+    </div>
+    </div>
+<div class="row">
+
+    <div class="col-lg-3 col-6 btn" style="background-color:#94A769">
+
+        <a href="@Url.Action("Index","Ref_Department")" style="color:white">
+
+            Manage Departments
+
+        </a>
+
+    </div>
+    @*<div class="col-lg-3 col-6 btn" style="background-color:#d9ae94">
+
+        <a href="@Url.Action("Index", "Ref_Department_Directors_Email")" style="color:white">
+
+            Manage Directors
+
+        </a>
+
+    </div>*@
+    <div class="col-lg-3 col-6 btn" style="background-color:#d08c60">
+
+        <a href="@Url.Action("Index", "Ref_Department_Managers_Email")" style="color:white">
+
+            Manage Managers
+
+        </a>
+
+    </div>
+
+
+
+</div>

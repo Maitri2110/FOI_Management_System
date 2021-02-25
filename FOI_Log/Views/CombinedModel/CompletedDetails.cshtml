@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "CompletedDetails";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+
+@{Html.RenderAction("CommonDetails", new { foiref = ViewBag.Foi_Ref });}
+<br/>
+<p>
+    @Html.ActionLink("<< Back to List", "CompletedFOIList", null, new { style = "color:White", @class = "btn btn-warning" })
+</p>

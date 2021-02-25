@@ -1,0 +1,447 @@
+﻿@model FOI_Log.Models.CombinedModel
+@{
+    ViewBag.Title = "FOIEdit";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+    string filename = "";
+    if (Model.foi.Uploaded_Document_Path != null)
+    {
+        string filepath = Model.foi.Uploaded_Document_Path;
+        int index = filepath.IndexOf("\\Documents\\");
+        if (index != -1)
+        {
+            filename = filepath.Substring(index);
+        }
+    }
+
+}
+
+    <style>
+       
+        .select2-container--classic .select2-search--inline .select2-search__field {
+            outline: 0;
+            box-shadow: none;
+            width: 100% !important;
+        }
+    </style>
+
+<h4 style="text-align:center;margin-bottom:10px;">Edit FOI</h4>
+<hr />
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @* @Html.HiddenFor(model => model.FOI_Ref)*@
+
+
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.foi.FOI_Ref, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.foi.FOI_Ref, new { htmlAttributes = new { @class = "form-control", @readonly = true, autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.foi.FOI_Ref, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.foi.FOI_Received, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.foi.FOI_Received, new { htmlAttributes = new { @class = "form-control", @readonly = true, autocomplete = "off" } })
+
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.foi.Requestor_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.foi.Requestor_Name, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+            @Html.ValidationMessageFor(model => model.foi.Requestor_Name, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.foi.Requestor_Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.foi.Requestor_Email, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+            @Html.ValidationMessageFor(model => model.foi.Requestor_Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.foi.Status_Code, "Status Code", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("Status_Code", null, htmlAttributes: new { @class = "form-control", @readonly = true })
+            @Html.ValidationMessageFor(model => model.foi.Status_Code, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.foi.Area_of_Interest_Code, "Area of Interest Code", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("Area_of_Interest_Code", null, htmlAttributes: new { @class = "form-control", @readonly = true })
+            @Html.ValidationMessageFor(model => model.foi.Area_of_Interest_Code, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+
+
+
+        @Html.LabelFor(model => model.foi.Association_or_Previous_Request, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.foi.Association_or_Previous_Request, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+            @Html.ValidationMessageFor(model => model.foi.Association_or_Previous_Request, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.Label("Attached Document", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @if (filename != "")
+            {
+                <a href=@Url.Content(filename) style="color:#1a0dab;text-decoration:underline">@filename.Substring(11)</a>
+            }
+            @* @Html.TextArea(Html.Raw(Model.foi.Information_Sought).ToHtmlString(), new { @class = "form-control", @rows = 6, @style = "max-width:100%", @readonly = true })*@
+            @Html.ValidationMessageFor(model => model.foi.Information_Sought, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.foi.Information_Sought, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class=" form-control" style="height:200px;overflow: scroll;overflow-y: scroll;overflow-x: hidden;background-color:#e9ecef">
+                @Html.Raw(Model.foi.Information_Sought)
+                @Html.HiddenFor(model => model.foi.Information_Sought)
+            </div>
+            @* @Html.TextArea(Html.Raw(Model.foi.Information_Sought).ToHtmlString(), new { @class = "form-control", @rows = 6, @style = "max-width:100%", @readonly = true })*@
+            @Html.ValidationMessageFor(model => model.foi.Information_Sought, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.Label("Departments List:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <table class="table table-bordered" id="tblDepartment">
+            <thead>
+                <tr>
+                    <td style="display:none"></td>
+                    <td>@Html.Label("Department")</td>
+                    <td>@Html.Label("Due Date")</td>
+                    @*<th>@Html.Label("1st Chase Date")</th>*@
+                    <td>@Html.Label("Response Date")</td>
+                    <td>@*@Html.Label("Need Chasing")*@</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.foiDepl != null)
+                {
+                    var i = 0;
+                    foreach (var d in Model.foiDepl)
+                    {
+                        <tr>
+                            <td style="display:none">@d.FOI_Department_Code</td>
+                            <td>@d.Ref_Department.Department</td>
+                            <td>@d.Date_Department_Due_To_Respond</td>
+                            @*<td>@d.First_IG_Team_Chase</td>*@
+                            <td>
+                                <input type="text" id="resDep @i" value="@d.Information_Received_From_Department" class="form-control datepicker" , autocomplete="off" />
+                                @*@Html.Editor("'" + d.Information_Received_From_Department + "'", new { htmlAttributes = new { @class = "form-control datepicker" } })*@
+                            </td>
+                            @if (d.First_IG_Team_Chase == null)
+                            {
+                                if (d.Date_Department_Due_To_Respond < DateTime.Today && d.Information_Received_From_Department == null && Model.foi.Completed_Flag == false)
+                                {
+                                    <td>
+                                        @Html.ActionLink("Chase Department", "Chase", new { id = d.FOI_Department_Code, foi_ref = Model.foi.FOI_Ref }, new { style = "color:White", @class = "btn btn-warning", @id = "chase" })
+
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                if (d.Date_Department_Due_To_Respond < DateTime.Today && d.Information_Received_From_Department == null && Model.foi.Completed_Flag == false)
+                                {
+                                    <td>@Html.ActionLink("2nd Chase", "Chase", new { id = d.FOI_Department_Code, foi_ref = Model.foi.FOI_Ref }, new { style = "color:White", @class = "btn btn-warning", @id = "chase1" })</td>
+                                }
+                            }
+
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+
+        @*@Html.Label("Department", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+
+                @Html.Editor("Department", new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+
+                <input type="button" id="btnDept" name="btnDept" value="+" class="btn btn-success" style="float:right" />
+
+                @Html.ValidationMessageFor(model => model.foi.First_IG_Team_Chase, "", new { @class = "text-danger" })
+            </div>*@
+
+    </div>
+
+    <div>
+        <div class="form-group row">
+            @Html.Label("Add Departments", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+
+                <input type="hidden" id="textBoxVal" />
+                <select id="NewDepartment" name="NewDepartment" multiple style="width:100%;" placeholder="New Department"></select>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        @*@Html.LabelFor(model => model.foi.Information_Received_From_Department, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.foi.Information_Received_From_Department, new { htmlAttributes = new { @class = "form-control datepicker3" } })
+                @Html.ValidationMessageFor(model => model.foi.Information_Received_From_Department, "", new { @class = "text-danger" })
+            </div>*@
+        @Html.LabelFor(model => model.foi.Response_Sent_to_Requestor, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.EditorFor(m => m.foi.Response_Sent_to_Requestor, new { htmlAttributes = new { @class = "form-control datepicker" } })
+            @Html.ValidationMessageFor(model => model.foi.Response_Sent_to_Requestor, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.foi.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.TextAreaFor(m => m.foi.Comments, new { @class = "form-control", @rows = 6, @style = "max-width:100%" })
+            @Html.ValidationMessageFor(model => model.foi.Comments, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.refStatus.Status_Description)
+    @Html.HiddenFor(m => m.refarea.Area_of_Interest)
+    @Html.HiddenFor(m => m.foi.Created_Date)
+    @Html.HiddenFor(m => m.foi.Created_By)
+
+
+    <div class="form-group">
+        <div class="col-md-12" style="text-align:center">
+            <input type="submit" value="Save FOI" id="Save" name="save" class="btn btn-success" />&nbsp;&nbsp;&nbsp;
+            <input type="submit" value="Submit FOI" id="Submit" name="submit" class="btn btn-primary" />&nbsp;&nbsp;&nbsp;
+            @* <span class="btn btn-primary" style="color:white"> @Html.ActionLink("Submit FOI", "SubmitFOI", new { fOIRef = Model.FOI_Ref }, new { style = "color:White" })</span>*@
+        </div>
+    </div>
+
+
+</div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "FOIList", null, new { style = "color:White", @class = "btn btn-warning" })
+</div>
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.js"></script>
+    <link href="~/Content/themes/base/datepicker.css" rel="stylesheet" />
+
+    <script>
+        $("#Save").on("click", function (e) {
+            // e.preventDefault();
+            var element = this;
+            var departments = {
+                "DepartmentResponse": [],
+                
+            };
+
+            $("#tblDepartment TBODY TR").each(function () {
+
+                var row = $(this);
+                var res = {};
+                res.FOI_Department_Code = row.find("TD").eq(0).html();
+                res.Department = row.find("TD").eq(1).html();
+                res.Date_Department_Due_To_Respond = row.find("TD").eq(2).html();
+                res.Information_Received_From_Department = row.find("td:eq(3) input[type='text']").val();
+
+                departments.DepartmentResponse.push(res);
+
+            });
+            var json = JSON.stringify(departments);
+            //console.log("Josn:"+json);
+            $("#Save").submit();
+
+            // e.preventDefault();
+            console.log("Josn:" + json);
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+               // url: "/Forms/FOI_Log/FOI_Log/CombinedModel/UpdateDepartmentResponse",
+                url: "/CombinedModel/UpdateDepartmentResponse",
+                data: json,
+                traditional: true,
+                //  data: slots,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log("insideajax");
+                    $("#Save").submit();
+                }
+            });
+        });
+        $("#Submit").on("click", function (e) {
+            // e.preventDefault();
+            var element = this;
+            var departments = {
+                "DepartmentResponse": []
+            };
+
+            $("#tblDepartment TBODY TR").each(function () {
+
+                var row = $(this);
+                var res = {};
+                res.FOI_Department_Code = row.find("TD").eq(0).html();
+                res.Department = row.find("TD").eq(1).html();
+                res.Date_Department_Due_To_Respond = row.find("TD").eq(2).html();
+                res.Information_Received_From_Department = row.find("td:eq(3) input[type='text']").val();
+
+                departments.DepartmentResponse.push(res);
+
+            });
+            var json = JSON.stringify(departments);
+            //console.log("Josn:"+json);
+            $("#Save").submit();
+
+            // e.preventDefault();
+            console.log("Josn:" + json);
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+               // url: "/Forms/FOI_Log/FOI_Log/CombinedModel/UpdateDepartmentResponse",
+                url: "/CombinedModel/UpdateDepartmentResponse",
+                data: json,
+                traditional: true,
+                //  data: slots,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log("insideajax");
+                    $("#Submit").submit();
+                }
+            });
+
+        });
+        //$("#chase").on("click", function (e) {
+            
+        //    var element = this;
+        //    var departments = {
+        //        "DepartmentResponse": [],
+        //        "foi_ref": +$('#foi_FOI_Ref').val(),
+        //        "chase": 1
+        //    };
+
+        //    $("#tblDepartment TBODY TR").each(function () {
+
+        //        var currentDate = (new Date()).toISOString().split('T')[0];
+        //        var row = $(this);
+        //        var res = {};
+        //        res.FOI_Department_Code = row.find("TD").eq(0).html();
+        //        res.Department = row.find("TD").eq(1).html();
+        //        res.Date_Department_Due_To_Respond = row.find("TD").eq(2).html();
+        //        res.Information_Received_From_Department = row.find("td:eq(3) input[type='text']").val();
+        //        res.First_IG_Team_Chase = currentDate;
+        //        departments.DepartmentResponse.push(res);
+        //    });
+
+        //    var json = JSON.stringify(departments);
+        //   // e.preventDefault();
+        //    console.log("Josn:" + json);
+            
+        //    $.ajax({
+        //        type: "POST",
+        //       // url: "/Forms/FOI_Log/FOI_Log/CombinedModel/UpdateDepartmentResponse",
+        //        url: "/CombinedModel/chase",
+        //        data: json,
+        //        traditional: true,
+        //        //  data: slots,
+        //        contentType: "application/json; charset=utf-8",
+        //        dataType: "json",
+        //        success: function (data) {
+        //            console.log("insideajax");
+        //            $('#Save').trigger('click');
+        //        }
+        //    });
+
+        //});
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $("input[name=btnDept]").click(function () {
+
+                $(".dept").toggle();
+
+
+            });
+            $("#NewDepartment").select2({
+                placeholder: "Select New Departments",
+                allowClear: true,
+                theme: "classic",
+                ajax: {
+                   // url: "/Forms/FOI_Log/FOI_Log/CombinedModel/GetDepartment",
+                    url: "/CombinedModel/GetDepartment",
+                    dataType: "json",
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        console.log(data);
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+            $('input[id ^= "resDep__"]').datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                //yearRange: "-60:+0"
+            });
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0"
+            });
+        });
+
+        //jQuery.validator.methods.date = function (value, element) {
+        //    var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        //    if (isChrome) {
+        //        var d = new Date();
+        //        return this.optional(element) || !/Invalid|NaN/.test(new Date(d.toLocaleDateString(value)));
+        //    } else {
+        //        return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
+        //    }
+        //};
+
+        @*@if (!ViewContext.ViewData.ModelState.IsValid) {
+            var sb = new System.Text.StringBuilder();
+            foreach(var modelState in ViewContext.ViewData.ModelState.Values)
+            {
+                foreach(var error in modelState.Errors)
+                {
+                    sb.Append(error.ErrorMessage);
+                }
+            }
+            @: alert('@sb.ToString()');
+        }*@
+
+    </script>
+}

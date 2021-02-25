@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - FOI Log</title>
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+</head>
+<body>
+    <div style="background-color: #005EB8;">
+        <div class="container-fluid">
+            <div style=" margin: 15px 0;">
+                <img style="height:54px" src="@Url.Content("~/Content/Images/FOI.png")" alt="Card image cap"> <span style="color:white;font-size:20px;">Freedom Of Information Management Tool</span>
+                <img style="width: 250px;float:right" src="@Url.Content("~/Content/Images/ngh_white_transp.png")" alt="Card image cap">
+            </div>
+            @*<div style="display: flex; justify-content: flex-end; margin: 15px 0;">
+            <img style="width: 250px;" src="@Url.Content("~/Content/Images/ngh_white_transp.png")" alt="Card image cap">
+        </div>*@
+            @*<div>
+            <ul class="nav navbar-nav">
+                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "FOI Requests List" ? "active" : "")">@Html.ActionLink("FOI Requests List", "Index", "FOis", null, new { @class = " nav-link__lightblue" })</li>
+                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Area of Interest" ? "active" : "")">@Html.ActionLink("Area of Interest", "Index", "Ref_Area_of_Interest", null, new { @class = "nav-link__purple" })</li>
+                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Departments" ? "active" : "")">@Html.ActionLink("Departments", "Index", "Ref_Department", null, new { @class = "nav-link__lightyellow" })</li>
+                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Directors Emails" ? "active" : "")">@Html.ActionLink("Directors Emails", "Index", "Ref_Department_Directors_Email", null, new { @class = "nav-link__green" })</li>
+                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Managers Email" ? "active" : "")">@Html.ActionLink("Managers Email", "Index", "Ref_Department_Managers_Email", null, new { @class = "nav-link__lightorange" })</li>
+                <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Status" ? "active" : "")">@Html.ActionLink("Status", "Index", "Ref_Status", null, new { @class = "nav-link__red" })</li>
+
+            </ul>
+        </div>*@
+        </div>
+    </div>
+    @*<div style="background-color: #005EB8;" class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <img style="width: 24%; float: right; margin-right:-51px;" src="@Url.Content("~/Content/images/ngh_white_transp.png")"  alt="Card image cap">
+
+                </div>
+            </div>
+        </div>*@
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - FOI Log</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

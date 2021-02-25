@@ -1,0 +1,370 @@
+﻿@model IEnumerable<FOI_Log.Models.FOI>
+
+@{
+    ViewBag.Title = "FOIList";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+    IEnumerable<FOI_Log.Models.FOI_Department> Department = ViewData["Department"] as IEnumerable<FOI_Log.Models.FOI_Department>;
+    
+}
+<style>
+    table.dataTable.fixedHeader-floating {
+        position: absolute !important
+    }
+</style>
+
+@*<div class="row" style="margin-bottom:10px;">
+    <div class="col-md-6">
+        <h2>FOI In Progress List</h2>
+    </div>
+    <div class="col-md-6">
+        <a href="~/CombinedModel/FOIDashboard">
+            <img src="~/Content/images/home.png" style="width:50px;float:right;margin:5px;" />
+        </a>
+    </div>
+</div>*@
+
+<h4 style="text-align:center;margin-bottom:10px;">
+    FOI In Progress List
+</h4>
+<hr/>
+<table id="table_id" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FOI_Received)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NGH_FOI_REF)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Requestor_Name)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Ref_Area_of_Interest.Area_of_Interest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ref_Status.Status_Description)
+            </th>
+            <th>
+                @Html.DisplayName("Chasing Flag")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FOI_Received)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NGH_FOI_REF)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Requestor_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ref_Area_of_Interest.Area_of_Interest)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ref_Status.Status_Description)
+                </td>
+                <td>
+
+                    @foreach (var d in Department.Where(f => f.FOI_Ref == item.FOI_Ref))
+                    {
+                        if (d.Date_Department_Due_To_Respond < DateTime.Today && d.Information_Received_From_Department == null)
+                        {
+                            <span style="display:none">Need Chasing</span>
+                            <img src="~/Content/images/red-flag.png" style="float:right;text-align:right;width:20px;" />
+                        }
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-mini btn-success icon-eye-open bigger-120 " id="@item.FOI_Ref" href="@Url.Action("FOIEdit", new { id = item.FOI_Ref })">
+                        <i class="glyphicon glyphicon-edit"></i> Edit
+                        <span class="sr-only">Edit</span>
+                    </a>
+                    @*<a class="btn btn-mini btn-info icon-edit bigger-120 " id="@item.FOI_Ref" href="@Url.Action("FOIView", new { id = item.FOI_Ref })">
+                        <i class="glyphicon glyphicon-info-sign"></i> Change Dept
+                        <span class="sr-only">Change Dept</span>
+                    </a>*@
+
+                    <a class="btn btn-mini btn-info icon-trash bigger-120 " id="@item.FOI_Ref" href="@Url.Action("FOIDetails", new { foiref = item.FOI_Ref})">
+                        <i class="glyphicon glyphicon-info-sign"></i> Details
+                        <span class="sr-only">Details</span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+   
+</table>
+
+
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+
+    @*@Scripts.Render("~/bundles/jqueryui")*@
+    @Scripts.Render("~/bundles/jquery")
+
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap4.min.css">
+
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables/dataTables.fixedHeader.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+           
+            var table = $('#table_id').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                "iDisplayLength": 100, //display 100 entries as default
+                "order": [],
+                //"bFilter": false
+                //"aoColumnDefs": [
+                //  { "bSortable": false, "aTargets": [0] }
+                //],
+
+                "columnDefs": [
+                    { "orderable": false, "targets": [0, 1, 2, 3, 4, 5] }
+                ],
+                paging: false,
+                info: false,
+                //searching: false
+            });
+
+            $('#table_id thead tr').clone(true).appendTo('#table_id thead');
+            $('#table_id thead tr:eq(1) th').each(function (i) {
+                var title = $(this).text().trim();
+
+                if (i == 4) {
+                    $(this).html('<select id="val" style="width:100%" placeholder="Search ' + title + '"><option value="">Status Description</option>' +
+                        '<option>Active</option>' +
+                        '<option>Responded</option>' +
+                        '<option>Drafted with Sally</option>' +
+                        '<option>Drafted for Debbie on Thursday</option>' +
+                        '<option>Withdrawn</option>' +
+                        '<option>On Hold for Clarification</option>' +
+                        '<option>Drafted with Debbie</option>' +
+                        '<option>Ready to Send</option>' +
+                        '<option>Drafted with Phil Bradley</option>' +
+                        '<option>Drafted with Stuart Finn</option>' +
+                        '<option>Drafted with Sheran Oke</option>' +
+                        '<option>Drafted with Claire Campbell</option>' +
+                        '<option>Ready for Debbie on Friday</option>' +
+                        '<option>Draft with Director</option>' +
+                        '<option>Late Response</option>' +
+                        '<option>Drafted</option>' +
+                        '<option>On Hold for Fee Payment</option>' +
+                        '<option>Unknown</option>' +
+                        '<option>Closed not responded</option>' +
+                        '</select > ');
+
+                    $('#val', this).change(function () {
+                        console.log(table.column(i).search() + "-" + this.value);
+                        if (table.column(i).search() != this.value) {
+                            console.log(table.column(i).search() + "-" + this.value);
+                            table
+                                .column(i)
+                                .search(this.value.trim())
+                                .draw();
+                        }
+                    });
+
+                }
+                if (i == 3) {
+                    $(this).html('<select id="val1" style="width:100%" placeholder="Search ' + title + '"><option value = "">Please Select </option>< option  > Closure</option > ' +
+                        '<option>Admissions</option>' +
+                        '<option>Agency</option>' +
+                        '<option>Contacts</option>' +
+                        '<option>Contracts</option>' +
+                        '<option>Equipment/Supplies</option>' +
+                        '<option>Estates</option>' +
+                        '<option>Expenses</option>' +
+                        '<option>Finance</option>' +
+                        '<option>Funerals</option>' +
+                        '<option>Minutes</option>' +
+                        '<option>Not us</option>' +
+                        '<option>Organogram</option>' +
+                        '<option>Parking</option>' +
+                        '<option  >Protocol/Policy</option>' +
+                        '<option  >Risks/incidents</option>' +
+                        '<option  >Staff</option>' +
+                        '<option >Systems</option>' +
+                        '<option >Treatments</option>' +
+                        '<option >Drugs</option>' +
+                        '<option >Legal</option>' +
+                        '<option >Form</option>' +
+                        '<option >Spend</option>' +
+                        '<option>Accounts</option>' +
+                        '<option>Diagnosis</option>' +
+                        '<option>Site Management</option>' +
+                        '<option>Services</option>' +
+                        '<option>Brexit</option>' +
+                        '<option>Deaths</option>' +
+                        '<option>Births</option>' +
+                        '<option>Infection</option>' +
+                        '<option>Beds</option>' +
+                        '<option>FOI</option>' +
+                        '<option>Projects</option>' +
+                        '<option >Cyber</option>' +
+                        '<option >Overseas</option>' +
+                        '<option>Complaints</option>' +
+                        '<option >Medicines</option>' +
+                        '<option >Audits</option>' +
+                        '<option >Diagnostics</option>' +
+                        '<option >Pensions</option>' +
+                        '<option >Appointments</option>' +
+                        '<option >Technology</option>' +
+                        '<option >Procedures</option>' +
+                        '<option>Catering</option>' +
+                        '<option>Records</option>' +
+                        '<option>Outsourcing</option>' +
+                        '<option>Correspondence</option>' +
+                        '<option>Referrals</option>' +
+                        '<option>Assaults</option>' +
+                        '<option>Transport</option>' +
+                        '<option>Cancellations</option>' +
+                        '<option>A&amp;E</option>' +
+                        '<option>Discharges</option>' +
+                        '<option>Surgeries</option>' +
+                        '<option>Maternity</option>' +
+                        '<option>Vehicles</option>' +
+                        '<option>SI/Never Events/Patient Harm</option>' +
+                        '<option>Disciplinary (MHPS)</option>' +
+                        '<option>VTE</option>' +
+                        '<option>CRRT</option>' +
+                        '<option>MSK</option>' +
+                        '<option>Unknown</option>' +
+                        '<option>Diabetes</option>' +
+                        '<option>Danetre Hospital PFI</option>' +
+                        '<option>CANH</option>' +
+                        '<option>Translation/ interpretation</option>' +
+                        '<option>With Sally</option>' +
+                        '<option>ICT</option>' +
+                        '<option>Prescribing</option>' +
+                        '<option>Neurology</option>' +
+                        '<option>Angiodema</option>' +
+                        '<option >Data Protection</option>' +
+                        '<option >Obstetrics</option>' +
+                        '<option >Opthalmology</option>' +
+                        '<option >Corporate Governance</option>' +
+                        '<option >Research &amp; Development</option>' +
+                        '<option >Medical Devices</option>' +
+                        '<option >IT</option>' +
+                        '<option >Sexual Health Services</option>' +
+                        '<option >Pharmacy</option>' +
+                        '<option >Informatics</option>' +
+                        '<option >Waiting Times</option>' +
+                        '<option >Attendances</option>' +
+                        '<option >Software</option>' +
+                        '<option >Radiotherapy</option>' +
+                        '<option >CBPM</option>' +
+                        '<option  >Dental</option>' +
+                        '<option >STP</option>' +
+                        '<option >MRI</option>' +
+                        '<option >CANH</option>' +
+                        '<option >Experian</option>' +
+                        '<option >Downs Syndrome</option>' +
+                        '<option >Cannulation</option>' +
+                        '<option >Cancer</option>' +
+                        '<option >Crohns</option>' +
+                        '<option >Mental Health</option>' +
+                        '<option >Haemophilia</option>' +
+                        '<option  >Sepsis</option>' +
+                        '<option >Paediatrics</option>' +
+                        '<option 102 >Theatres</option>' +
+                        '<option 103 >Patient Exeprience</option>' +
+                        '<option 104 >DNACPR</option>' +
+                        '<option 105 >DOAC</option>' +
+                        '<option 106 >Trauma &amp; Orthopaedics</option>' +
+                        '<option 107 >Rheumatology</option>' +
+                        '<option 108 >Security</option>' +
+                        '<option 109 >HPV</option>' +
+                        '<option 110 >Reporting</option>' +
+                        '<option 111 >Operations</option>' +
+                        '<option 112 >Radiology</option>' +
+                        '<option 113 >Fertility</option>' +
+                        '<option 114 >Outpatients</option>' +
+                        '<option 115 >Multiple Sclerosis</option>' +
+                        '<option 116 >Injectors</option>' +
+                        '<option 117 >Data</option>' +
+                        '<option 118 >OPEL</option>' +
+                        '<option 119 >Physiotherapy</option>' +
+                        '<option 120 >Cardiac Arrest</option>' +
+                        '<option 121 >Colitis</option>' +
+                        '<option 122 >ERCP</option>' +
+                        '<option 123 >Osteoporosis</option>' +
+                        '<option 124 >Prostate</option>' +
+                        '<option 125 >Imaging</option>' +
+                        '<option 126 >Bed Blocking</option>' +
+                        '<option 127 >Racism</option>' +
+                        '<option 128 >Endoscopy</option>' +
+                        '<option 129 >COVID19</option>' +
+                        '<option 130 >Obesity</option>' +
+                        '<option 131 >Hymenoplasty</option>' +
+                        '<option 132 >Migraine</option>' +
+                        '<option 133 >Intra-Osseous</option>' +
+                        '<option 134 >Anaemia</option>' +
+                        '<option 135 >Sleep Apnoea</option>' +
+                        '<option 136 >Patents</option>' +
+                        '</select > ');
+
+                    $('#val1', this).change(function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+                }
+
+                if (i == 5) {
+                    $(this).html('<select id="val5" style="width:100%" placeholder="Search ' + title + '"><option value = "">Please Select </option>' +
+                        '<option>Need Chasing</option>' +
+                        '</select>');
+                    $('#val5', this).change(function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+                }
+                if (i == 0 || i == 1 || i == 2) {
+
+                    $(this).html('<input type="text" style="width:126px;" placeholder="' + title + '" />');
+
+                    $('input', this).on('keyup change', function () {
+                        if (table.column(i).search() !== this.value) {
+                            table
+                                .column(i)
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+
+                }
+            });
+
+           
+            //$('#rows').text(table['context'][0]['aiDisplay'].length);
+            $('#table_id tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+        });
+
+    </script>
+
+}

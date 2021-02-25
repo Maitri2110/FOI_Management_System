@@ -1,0 +1,110 @@
+﻿body {
+    /*padding-top: 50px;*/
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* Bootstrap over-rides */
+.nav.navbar-nav {
+}
+
+    .nav.navbar-nav li {
+        margin-right: 1px;
+    }
+
+        .nav.navbar-nav li a {
+            color: #fff;
+            font-size: 14px;
+            border-radius: 5px 5px 0 0;
+        }
+
+            .nav.navbar-nav li a:hover {
+                background-color: #004b93;
+                text-decoration: underline;
+            }
+
+        .nav.navbar-nav li.active a {
+            background-color: #fff;
+            color: #000;
+        }
+
+/* Navigation */
+.nav.navbar-nav li a.nav-link__purple {
+    background-color: purple;
+}
+
+.nav.navbar-nav li a.nav-link__lightblue {
+    background-color: lightblue;
+}
+
+.nav.navbar-nav li a.nav-link__lightyellow {
+    background-color: lightyellow;
+    color: #000;
+}
+
+.nav.navbar-nav li a.nav-link__grey {
+    background-color: grey;
+}
+
+.nav.navbar-nav li a.nav-link__green {
+    background-color: green;
+}
+
+.nav.navbar-nav li a.nav-link__pink {
+    background-color: pink;
+}
+
+.nav.navbar-nav li a.nav-link__lightorange {
+    background-color: #FFD27F; /* light orange */
+    color: #000;
+}
+
+.nav.navbar-nav li a.nav-link__yellow {
+    background-color: yellow;
+    color: #000;
+}
+
+        .nav.navbar-nav li a.nav-link__darkblue {
+            background-color: darkblue;
+        }
+
+        .nav.navbar-nav li a.nav-link__sagegreen {
+            background-color: #78866b; /* sage green */
+        }
+
+        .nav.navbar-nav li a.nav-link__red {
+            background-color: red;
+        }
+
+        .nav.navbar-nav li a.nav-link__peachpuff {
+            background-color: peachpuff;
+            color: #000;
+        }
+
+.nav.navbar-nav li a.nav-link__out-of-hours {
+    background-color: #ffdde2; /* light pink */
+    color: #000;
+}
+
+.nav.navbar-nav li a.nav-link__orange {
+    background-color: orange;
+}

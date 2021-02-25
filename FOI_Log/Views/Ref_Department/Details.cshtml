@@ -1,0 +1,43 @@
+﻿@model FOI_Log.Models.Ref_Department
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+
+<h4 style="text-align:center">Department Details</h4>
+
+<hr />
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Department)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Department)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Days_to_Respond)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Days_to_Respond)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Department_Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Department_Email)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    
+    @Html.ActionLink("Back to List", "Index", null, new { style = "color:White", @class = "btn btn-warning" })
+</p>

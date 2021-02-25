@@ -1,0 +1,41 @@
+﻿@model FOI_Log.Models.Ref_Area_of_Interest
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+
+<h4 style="text-align:center">Create Area Of Interest</h4>
+
+<hr />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+    
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Area_of_Interest, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Area_of_Interest, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Area_of_Interest, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10" style="text-align:center">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { style = "color:White", @class = "btn btn-warning" })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

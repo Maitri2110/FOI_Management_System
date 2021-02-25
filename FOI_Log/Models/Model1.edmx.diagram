@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fa92b376885b4da0ab5bc31d99fd7fd2" Name="Diagram1">
+        <EntityTypeShape EntityType="FOI_LOGModel.FOI" Width="2" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="FOI_LOGModel.FOI_Department" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FOI_LOGModel.Ref_Area_of_Interest" Width="1.5" PointX="1.5" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="FOI_LOGModel.Ref_Department" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FOI_LOGModel.Ref_Department_Directors_Email" Width="1.5" PointX="3.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="FOI_LOGModel.Ref_Department_Managers_Email" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="FOI_LOGModel.FK_FOI_Department_FOI" ManuallyRouted="false" />
+        <AssociationConnector Association="FOI_LOGModel.FK_FOI_Ref_Area_of_Interest" ManuallyRouted="false" />
+        <AssociationConnector Association="FOI_LOGModel.FK_FOI_Department_Ref_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="FOI_LOGModel.FK_Ref_Department_Directors_Email_Ref_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="FOI_LOGModel.FK_Ref_Department_Managers_Email_Ref_Department" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="FOI_LOGModel.Ref_Status" Width="1.5" PointX="0.75" PointY="6.75" />
+        <AssociationConnector Association="FOI_LOGModel.FK_FOI_Ref_Status" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,13 @@
+﻿@model FOI_Log.Models.FOI
+@{
+    ViewBag.Title = "FOIDetails";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+
+@{Html.RenderAction("CommonDetails", new { foiref = ViewBag.Foi_Ref });}
+
+<p>
+    @Html.ActionLink("Back to List", "FOIList", null, new { style = "color:White", @class = "btn btn-warning" })
+</p>
+
+

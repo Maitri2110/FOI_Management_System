@@ -1,0 +1,45 @@
+﻿@model FOI_Log.Models.Ref_Department_Managers_Email
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+
+<h4 style="text-align:center">Delete Manager Email Address</h4>
+<hr />
+
+<div>
+    <h5>Are you sure you want to delete this Manager Email Address?</h5>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Email_Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email_Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ref_Department.Department)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ref_Department.Department)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-offset-2 col-md-10" style="text-align:center">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            @*@Html.ActionLink("Back to List", "Index")*@
+        </div>
+    }
+
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { style = "color:White", @class = "btn btn-warning" })
+</div>

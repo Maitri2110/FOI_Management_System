@@ -1,0 +1,285 @@
+﻿@model FOI_Log.Models.FOI
+@{
+    ViewBag.Title = "ResendEmails";
+    Layout = "~/Views/Shared/DashboardLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Resend Emails To Departments</h2>
+    </div>
+    <div class="col-md-6">
+        <a href="~/CombinedModel/FOIDashboard">
+            <img src="~/Content/images/home.png" style="width:50px;float:right;margin:5px;" />
+        </a>
+    </div>
+</div>
+<dl class="dl-horizontal">
+    <dt>
+        @Html.DisplayNameFor(model => model.FOI_Received)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.FOI_Received)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.NGH_FOI_REF)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.NGH_FOI_REF)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.First_IG_Team_Chase)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.First_IG_Team_Chase)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Information_Received_From_Department)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Information_Received_From_Department)
+    </dd>
+
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Requestor)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Requestor)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Information_Sought)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Information_Sought)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Ref_Area_of_Interest.Area_of_Interest)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Ref_Area_of_Interest.Area_of_Interest)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Ref_Status.Status_Description)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Ref_Status.Status_Description)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.Created_By)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Created_By)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Created_Date)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Created_Date)
+    </dd>
+
+</dl>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>FOI</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.FOI_Ref)
+
+       
+        <div class="form-group">
+            @Html.LabelFor(model => model.Information_Sought, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.Information_Sought, new { @class = "form-control", @rows = 6, @style = "max-width:60%" })
+                @Html.ValidationMessageFor(model => model.Information_Sought, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.Comments, new { @class = "form-control", @rows = 6, @style = "max-width:60%" })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status_Code, "Status_Code", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Status_Code", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Status_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Area_of_Interest_Code, "Area_of_Interest_Code", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Area_of_Interest_Code", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Area_of_Interest_Code, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Created_By, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Created_By, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Created_By, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Created_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Created_Date, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.Created_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Updated_By, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Updated_By, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Updated_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Updated_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Updated_Date, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Updated_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Deleted_By, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Deleted_By, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Deleted_By, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Deleted_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Deleted_Date, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Deleted_Date, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Head_DQSP_Approval, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Head_DQSP_Approval, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Head_DQSP_Approval, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DSQP_Approved_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DSQP_Approved_Date, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.DSQP_Approved_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Director_Approval, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Director_Approval, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Director_Approval, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Director_Approval_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Director_Approval_Date, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.Director_Approval_Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<link href="~/Content/themes/base/datepicker.css" rel="stylesheet" />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0"
+            });
+
+        });
+
+
+        jQuery.validator.methods.date = function (value, element) {
+            var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+            if (isChrome) {
+                var d = new Date();
+                return this.optional(element) || !/Invalid|NaN/.test(new Date(d.toLocaleDateString(value)));
+            } else {
+                return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
+            }
+        };
+
+        @*@if (!ViewContext.ViewData.ModelState.IsValid) {
+            var sb = new System.Text.StringBuilder();
+            foreach(var modelState in ViewContext.ViewData.ModelState.Values)
+            {
+                foreach(var error in modelState.Errors)
+                {
+                    sb.Append(error.ErrorMessage);
+                }
+            }
+            @: alert('@sb.ToString()');
+        }*@
+
+
+    </script>
+
+}
+
+

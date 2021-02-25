@@ -1,0 +1,113 @@
+﻿@model FOI_Log.Models.FOI
+@{
+    ViewBag.Title = "CommonDetails";
+    Layout = "";
+}
+
+<style>
+
+    .dl-horizontal dt {
+        float: left;
+        width: 200px;
+        clear: left;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+
+    .dl-horizontal dd {
+        margin-left: 200px;
+    }
+</style>
+<h4 style="margin-bottom:10px;text-align:center">FOI Details</h4>
+<hr />
+<div style="background-color:white;padding:10px;">
+    <div class="row">
+        @Html.LabelFor(model => model.FOI_Received, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.FOI_Received)
+
+        </div>
+        @Html.LabelFor(model => model.FOI_Ref, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.FOI_Ref)
+
+        </div>
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(model => model.Requestor_Name, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.Requestor_Name)
+
+        </div>
+        @Html.LabelFor(model => model.Requestor_Email, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.Requestor_Email)
+
+        </div>
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(model => model.Ref_Area_of_Interest.Area_of_Interest, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.Ref_Area_of_Interest.Area_of_Interest)
+
+        </div>
+        @Html.LabelFor(model => model.Ref_Status.Status_Description, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.Ref_Status.Status_Description)
+
+        </div>
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(model => model.Association_or_Previous_Request, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.Association_or_Previous_Request)
+
+        </div>
+        @Html.LabelFor(model => model.Response_Sent_to_Requestor, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.Response_Sent_to_Requestor)
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(model => model.Information_Sought, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-8" style="white-space: pre-line">
+            @Html.DisplayFor(model => model.Information_Sought)
+            @*@Html.Raw(Model.Information_Sought)*@
+        </div>
+    </div>
+    <div class="row">
+        @Html.LabelFor(model => model.FOI_Department, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-8">
+
+            @foreach (var d in ViewBag.Department)
+            {
+                <span>@d, </span>
+            }
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
+        <div class="col-md-4">
+            @Html.DisplayFor(model => model.Comments)
+
+        </div>
+
+    </div>
+
+
+   
+
+
+</div>
+

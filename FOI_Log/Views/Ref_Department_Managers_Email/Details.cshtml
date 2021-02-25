@@ -1,0 +1,36 @@
+﻿@model FOI_Log.Models.Ref_Department_Managers_Email
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/Layout1.cshtml";
+}
+
+<h4 style="text-align:center">Manager Email Address</h4>
+<hr />
+
+<div>
+    <h4>Ref_Department_Managers_Email</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Email_Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email_Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ref_Department.Department)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ref_Department.Department)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Email_Code }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
