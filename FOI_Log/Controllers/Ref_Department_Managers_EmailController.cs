@@ -18,17 +18,17 @@ namespace FOI_Log.Controllers
 
         public void DisplayCount()
         {
-
-            //UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
-            //ViewBag.givenname = user.GivenName + " " + user.Surname;
-            //ViewBag.FOIInProgress = db.FOIs.Where(x => x.Completed_Flag == false).Count();
-            //ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+            ViewBag.givenname = user.GivenName + " " + user.Surname;
+            ViewBag.FOIInProgress = db.FOIs.Where(x => x.Completed_Flag == false).Count();
+            ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();
         }
 
         // GET: Ref_Department_Managers_Email
         public ActionResult Index()
         {
             ViewBag.ManagersActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             var ref_Department_Managers_Email = db.Ref_Department_Managers_Email.Include(r => r.Ref_Department);
             return View(ref_Department_Managers_Email.ToList());
@@ -38,6 +38,7 @@ namespace FOI_Log.Controllers
         public ActionResult Details(int? id)
         {
             ViewBag.ManagersActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -55,6 +56,7 @@ namespace FOI_Log.Controllers
         public ActionResult Create()
         {
             ViewBag.ManagersActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             ViewBag.Department_Code = new SelectList(db.Ref_Department, "Department_Code", "Department");
             return View();
@@ -67,7 +69,6 @@ namespace FOI_Log.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Email_Code,Email_Address,Department_Code")] Ref_Department_Managers_Email ref_Department_Managers_Email)
         {
-            ViewBag.ManagersActive = "active";
             DisplayCount();
             if (ModelState.IsValid)
             {
@@ -84,6 +85,7 @@ namespace FOI_Log.Controllers
         public ActionResult Edit(int? id)
         {
             ViewBag.ManagersActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -105,7 +107,7 @@ namespace FOI_Log.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Email_Code,Email_Address,Department_Code")] Ref_Department_Managers_Email ref_Department_Managers_Email)
         {
-            ViewBag.ManagersActive = "active";
+           
             DisplayCount();
             if (ModelState.IsValid)
             {
@@ -121,6 +123,7 @@ namespace FOI_Log.Controllers
         public ActionResult Delete(int? id)
         {
             ViewBag.ManagersActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -139,7 +142,7 @@ namespace FOI_Log.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ViewBag.ManagersActive = "active";
+           
             DisplayCount();
             Ref_Department_Managers_Email ref_Department_Managers_Email = db.Ref_Department_Managers_Email.Find(id);
             db.Ref_Department_Managers_Email.Remove(ref_Department_Managers_Email);

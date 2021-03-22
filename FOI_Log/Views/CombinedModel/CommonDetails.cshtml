@@ -79,8 +79,9 @@
     <div class="row">
         @Html.LabelFor(model => model.Information_Sought, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight:bold" })
         <div class="col-md-8" style="white-space: pre-line">
-            @Html.DisplayFor(model => model.Information_Sought)
-            @*@Html.Raw(Model.Information_Sought)*@
+           
+            @*@Html.DisplayFor(model => model.Information_Sought)*@
+            @Html.Raw(Model.Information_Sought)
         </div>
     </div>
     <div class="row">

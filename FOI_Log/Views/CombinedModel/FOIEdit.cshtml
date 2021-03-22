@@ -65,37 +65,35 @@
             @Html.ValidationMessageFor(model => model.foi.Requestor_Email, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group row">
-        @Html.LabelFor(model => model.foi.Status_Code, "Status Code", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.DropDownList("Status_Code", null, htmlAttributes: new { @class = "form-control", @readonly = true })
-            @Html.ValidationMessageFor(model => model.foi.Status_Code, "", new { @class = "text-danger" })
-        </div>
-        @Html.LabelFor(model => model.foi.Area_of_Interest_Code, "Area of Interest Code", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-4">
-            @Html.DropDownList("Area_of_Interest_Code", null, htmlAttributes: new { @class = "form-control", @readonly = true })
-            @Html.ValidationMessageFor(model => model.foi.Area_of_Interest_Code, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group row">
-
-
-
         @Html.LabelFor(model => model.foi.Association_or_Previous_Request, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-4">
             @Html.EditorFor(model => model.foi.Association_or_Previous_Request, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
             @Html.ValidationMessageFor(model => model.foi.Association_or_Previous_Request, "", new { @class = "text-danger" })
         </div>
+        @if (filename != "")
+        {
+            @Html.Label("Attached Document", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+
+                <a href=@Url.Content(filename) style="color:#1a0dab;text-decoration:underline">@filename.Substring(11)</a>
+
+                @* @Html.TextArea(Html.Raw(Model.foi.Information_Sought).ToHtmlString(), new { @class = "form-control", @rows = 6, @style = "max-width:100%", @readonly = true })*@
+                @Html.ValidationMessageFor(model => model.foi.Information_Sought, "", new { @class = "text-danger" })
+            </div>
+        }
     </div>
     <div class="form-group row">
-        @Html.Label("Attached Document", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @if (filename != "")
-            {
-                <a href=@Url.Content(filename) style="color:#1a0dab;text-decoration:underline">@filename.Substring(11)</a>
-            }
-            @* @Html.TextArea(Html.Raw(Model.foi.Information_Sought).ToHtmlString(), new { @class = "form-control", @rows = 6, @style = "max-width:100%", @readonly = true })*@
-            @Html.ValidationMessageFor(model => model.foi.Information_Sought, "", new { @class = "text-danger" })
+        @Html.LabelFor(model => model.foi.Status_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("Status_Code", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.foi.Status_Code, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.foi.Area_of_Interest_Code, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.DropDownList("Area_of_Interest_Code", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.foi.Area_of_Interest_Code, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group row">
@@ -109,6 +107,7 @@
             @Html.ValidationMessageFor(model => model.foi.Information_Sought, "", new { @class = "text-danger" })
         </div>
     </div>
+
     <div class="form-group row">
         @Html.Label("Departments List:", htmlAttributes: new { @class = "control-label col-md-2" })
         <table class="table table-bordered" id="tblDepartment">
@@ -206,10 +205,12 @@
         </div>
     </div>
 
-    @Html.HiddenFor(m => m.refStatus.Status_Description)
-    @Html.HiddenFor(m => m.refarea.Area_of_Interest)
+
+    @Html.HiddenFor(m => m.foi.Area_of_Interest_Code)
+    @Html.HiddenFor(m => m.foi.Status_Code)
     @Html.HiddenFor(m => m.foi.Created_Date)
     @Html.HiddenFor(m => m.foi.Created_By)
+    @Html.HiddenFor(model => model.foi.Uploaded_Document_Path)
 
 
     <div class="form-group">

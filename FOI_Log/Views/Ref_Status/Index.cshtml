@@ -27,20 +27,21 @@
                 @Html.DisplayFor(modelItem => item.Status_Description)
             </td>
             <td>
-               
+
                 <a class="btn btn-mini btn-success icon-eye-open bigger-120 " id="@item.Status_Code" href="@Url.Action("Edit", new { id = item.Status_Code })">
                     <i class="glyphicon glyphicon-edit"></i> Edit
                     <span class="sr-only">Edit</span>
                 </a>
-                @*<a class="btn btn-mini btn-info icon-edit bigger-120 " id="@item.Status_Code" href="@Url.Action("Details", new { id = item.Status_Code })">
-                    <i class="glyphicon glyphicon-info-sign"></i> Details
-                    <span class="sr-only">Details</span>
+                <a class="btn btn-mini btn-danger icon-trash bigger-120 " id="@item.Status_Code" href="@Url.Action("Archive", new { id = item.Status_Code})">
+                    <i class="glyphicon glyphicon-info-sign"></i> Archive
+                    <span class="sr-only">Archive</span>
                 </a>
+                @*<a class="btn btn-mini btn-info icon-edit bigger-120 " id="@item.Status_Code" href="@Url.Action("Details", new { id = item.Status_Code })">
+            <i class="glyphicon glyphicon-info-sign"></i> Details
+            <span class="sr-only">Details</span>
+        </a>
 
-                <a class="btn btn-mini btn-danger icon-trash bigger-120 " id="@item.Status_Code" href="@Url.Action("Delete", new { foiref = item.Status_Code})">
-                    <i class="glyphicon glyphicon-info-sign"></i> Delete
-                    <span class="sr-only">Delete</span>
-                </a>*@
+                *@
             </td>
         </tr>
     }

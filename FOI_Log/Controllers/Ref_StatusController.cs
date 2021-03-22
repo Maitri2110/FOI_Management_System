@@ -19,24 +19,26 @@ namespace FOI_Log.Controllers
         public void DisplayCount()
         {
 
-            //UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
-            //ViewBag.givenname = user.GivenName + " " + user.Surname;
-            //ViewBag.FOIInProgress = db.FOIs.Where(x => x.Completed_Flag == false).Count();
-            //ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+            ViewBag.givenname = user.GivenName + " " + user.Surname;
+            ViewBag.FOIInProgress = db.FOIs.Where(x => x.Completed_Flag == false).Count();
+            ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();
         }
 
         // GET: Ref_Status
         public ActionResult Index()
         {
             ViewBag.RefStatusActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
-            return View(db.Ref_Status.ToList());
+            return View(db.Ref_Status.Where(s=>s.Active == true).ToList());
         }
 
         // GET: Ref_Status/Details/5
         public ActionResult Details(int? id)
         {
             ViewBag.RefStatusActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -54,6 +56,7 @@ namespace FOI_Log.Controllers
         public ActionResult Create()
         {
             ViewBag.RefStatusActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             return View();
         }
@@ -63,9 +66,9 @@ namespace FOI_Log.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Status_Code,Status_Description")] Ref_Status ref_Status)
+        public ActionResult Create([Bind(Include = "Status_Code,Status_Description,Active")] Ref_Status ref_Status)
         {
-            ViewBag.RefStatusActive = "active";
+            ref_Status.Active = true;
             DisplayCount();
             if (ModelState.IsValid)
             {
@@ -81,6 +84,7 @@ namespace FOI_Log.Controllers
         public ActionResult Edit(int? id)
         {
             ViewBag.RefStatusActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -99,9 +103,9 @@ namespace FOI_Log.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Status_Code,Status_Description")] Ref_Status ref_Status)
+        public ActionResult Edit([Bind(Include = "Status_Code,Status_Description,Active")] Ref_Status ref_Status)
         {
-            ViewBag.RefStatusActive = "active";
+            ref_Status.Active = true;
             DisplayCount();
             if (ModelState.IsValid)
             {
@@ -113,9 +117,10 @@ namespace FOI_Log.Controllers
         }
 
         // GET: Ref_Status/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Archive(int? id)
         {
             ViewBag.RefStatusActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -130,21 +135,23 @@ namespace FOI_Log.Controllers
         }
 
         // POST: Ref_Status/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult ArchiveConfirmed(int id)
         {
-            ViewBag.RefStatusActive = "active";
+            
             DisplayCount();
+           
             Ref_Status ref_Status = db.Ref_Status.Find(id);
-            db.Ref_Status.Remove(ref_Status);
+            ref_Status.Active = false;
+            db.Entry(ref_Status).Property("Active").IsModified = true;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            ViewBag.RefStatusActive = "active";
+           
             DisplayCount();
             if (disposing)
             {

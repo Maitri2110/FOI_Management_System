@@ -1,14 +1,14 @@
 ﻿@model FOI_Log.Models.Ref_Area_of_Interest
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Archive";
     Layout = "~/Views/Shared/Layout1.cshtml";
 }
 
 
-    <h2>Are you sure you want to Archived this Area Of Interest?</h2>
+<h4 style="text-align: center;">Are you sure you want to Archived this Area Of Interest?</h4>
 <hr />
-<div>
+<div style="text-align:center">
 
     <dl class="dl-horizontal">
         <dt>
@@ -20,17 +20,18 @@
         </dd>
 
     </dl>
-
+    <br/>
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            <input type="submit" value="Archive" class="btn btn-danger" />
 
         </div>
     }
-    <div>
-        @Html.ActionLink("Back to List", "Index", null, new { style = "color:White", @class = "btn btn-warning" })
-    </div>
+
+</div>
+<div>
+    @Html.ActionLink("<< Back to List", "Index", null, new { style = "color:White", @class = "btn btn-warning" })
 </div>

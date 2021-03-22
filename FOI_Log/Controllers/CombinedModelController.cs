@@ -11,6 +11,7 @@ using FOI_Log.Models;
 using System.IO;
 using System.DirectoryServices.AccountManagement;
 using System.Net.Mime;
+using System.Security.Cryptography;
 
 namespace FOI_Log.Controllers
 {
@@ -24,10 +25,10 @@ namespace FOI_Log.Controllers
 
         public void DisplayCount()
         {
-           /* UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
             ViewBag.givenname = user.GivenName + " " + user.Surname;
             ViewBag.FOIInProgress = db.FOIs.Where(x => x.Completed_Flag == false).Count();
-            ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();*/
+            ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();
         }
 
         public ActionResult FOIDashboard()
@@ -54,7 +55,7 @@ namespace FOI_Log.Controllers
 
         public ActionResult CommonDetails(int? foiref)
         {
-            //ViewBag.FOICompletedActive = "active";
+            
             DisplayCount();
             if (foiref == null)
             {
@@ -158,11 +159,12 @@ namespace FOI_Log.Controllers
                     string fileName = Path.GetFileName(fileUploader.FileName);
                     mail.Attachments.Add(new Attachment(fileUploader.InputStream, fileName));
                 }
-                if (filePath != null)
+                if (filePath != "" && filePath != null)
                 {
                     string file = filePath;
                     // Create  the file attachment for this email message.
-                    Attachment data = new Attachment(file, MediaTypeNames.Application.Octet);
+                     Attachment data = new Attachment(file, MediaTypeNames.Application.Octet);
+                    
                     // Add time stamp information for the file.
                     ContentDisposition disposition = data.ContentDisposition;
                     disposition.CreationDate = System.IO.File.GetCreationTime(file);
@@ -197,8 +199,8 @@ namespace FOI_Log.Controllers
             DisplayCount();
             ViewBag.FOICreateActive = "active";
             CombinedModel objCom = new CombinedModel();
-            ViewBag.Area_of_Interest_Code = new SelectList(db.Ref_Area_of_Interest.OrderBy(a => a.Area_of_Interest), "Interest_Code", "Area_of_Interest");
-            ViewBag.Status_Code = new SelectList(db.Ref_Status.OrderBy(s => s.Status_Description), "Status_Code", "Status_Description");
+            ViewBag.Area_of_Interest_Code = new SelectList(db.Ref_Area_of_Interest.Where(a => a.Active == true).OrderBy(a => a.Area_of_Interest), "Interest_Code", "Area_of_Interest");
+            ViewBag.Status_Code = new SelectList(db.Ref_Status.Where(s => s.Active == true).OrderBy(s => s.Status_Description), "Status_Code", "Status_Description");
             ViewBag.Department = new SelectList(db.Ref_Department, "Department_Code","Department");
             return View(objCom);
         }
@@ -207,7 +209,7 @@ namespace FOI_Log.Controllers
         [HttpPost]
         public ActionResult FOICreate([Bind(Include = "FOI_Ref,FOI_Received,NGH_FOI_REF,First_IG_Team_Chase,Information_Received_From_Department,Response_Sent_to_Requestor,Association_or_Previous_Request,Requestor_Name,Requestor_Email,Information_Sought,Comments,Status_Code,Area_of_Interest_Code,Created_By,Created_Date,Updated_By,Updated_Date,Deleted_By,Deleted_Date,Head_DQSP_Approval,DSQP_Approved_Date,Director_Approval,Director_Approval_Date")] FOI fOI, int[] Department, int Area_of_Interest_Code, int Status_Code, HttpPostedFileBase file)
         {
-           // UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
             ViewBag.FOICreateActive = "active";
             DisplayCount();
             List<Ref_Department_Managers_Email> m_email;
@@ -222,7 +224,7 @@ namespace FOI_Log.Controllers
             
             if (ModelState.IsValid)
             {
-                //fOI.Created_By = user.DisplayName;
+                fOI.Created_By = user.DisplayName;
                 fOI.Created_Date = DateTime.Now;
                 fOI.Updated_Date = DateTime.Now;
                 fOI.Area_of_Interest_Code = Area_of_Interest_Code;
@@ -242,7 +244,7 @@ namespace FOI_Log.Controllers
 
                     due_date = db.FOI_Department.Where(a => a.FOI_Ref == foi_ref && a.Department_Code == d).FirstOrDefault();
 
-                   // dep = db.Ref_Department.Where(f=>f.Department == d).FirstOrDefault();
+                 
                     m_email = db.Ref_Department_Managers_Email.Where(m => m.Department_Code == d).ToList();
                     var To_Email = "";
                    
@@ -269,7 +271,7 @@ namespace FOI_Log.Controllers
                         }
                         if (due_date!=null)
                         {
-                            body = body.Replace("[Date]", due_date.Date_Department_Due_To_Respond.ToString()); //replacing the required things  
+                            body = body.Replace("[Date]", due_date.Date_Department_Due_To_Respond.Value.Date.ToString()); //replacing the required things  
                         }
                         if (foi_ref.ToString() != null)
                         {
@@ -285,7 +287,7 @@ namespace FOI_Log.Controllers
             }
             string message = "New FOI has created";
             return RedirectToAction("FOICreate",new { message = message });
-          //  return View();
+         
         }
 
         public int UpdateDepartmentResponse(Department departments)
@@ -298,17 +300,7 @@ namespace FOI_Log.Controllers
         {
             var fOI = db.FOIs.Where(f => f.FOI_Ref == foi_ref).FirstOrDefault();
             var fOIs = db.FOI_Department.Where(f => f.FOI_Department_Code == id).FirstOrDefault();
-            if (fOIs.First_IG_Team_Chase == null)
-            {
-                    var Department = db.FOI_Department.Where(x => x.FOI_Department_Code == id).FirstOrDefault();
-                    if (Department != null)
-                    {
-
-                        Department.First_IG_Team_Chase = DateTime.Today;
-                        db.Entry(Department).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-            }
+            
             ViewBag.FOIChaseActive = "active";
             DisplayCount();
            
@@ -376,9 +368,20 @@ namespace FOI_Log.Controllers
                     {
                         filePath = fOI.Uploaded_Document_Path;
                     }
-                    MailAddress copy = new MailAddress("Sarah.Stell@NGH.NHS.UK");
+                    MailAddress copy = new MailAddress("sarah.stell@NGH.NHS.UK");
 
                     SendMail(To_Email, copy, "FOI", body,null, filePath);
+                }
+            }
+            if (fOIs.First_IG_Team_Chase == null)
+            {
+                var Department = db.FOI_Department.Where(x => x.FOI_Department_Code == id).FirstOrDefault();
+                if (Department != null)
+                {
+
+                    Department.First_IG_Team_Chase = DateTime.Today;
+                    db.Entry(Department).State = EntityState.Modified;
+                    db.SaveChanges();
                 }
             }
 
@@ -395,7 +398,7 @@ namespace FOI_Log.Controllers
                 ViewBag.Message = message;
             }
             ViewBag.FOIInProgressActive = "active";
-            //DisplayCount();
+            DisplayCount();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -407,8 +410,12 @@ namespace FOI_Log.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Area_of_Interest_Code = new SelectList(db.Ref_Area_of_Interest.OrderBy(a => a.Area_of_Interest), "Interest_Code", "Area_of_Interest");
-            ViewBag.Status_Code = new SelectList(db.Ref_Status.OrderBy(s => s.Status_Description), "Status_Code", "Status_Description");
+            var area_description = (from area in db.Ref_Area_of_Interest join foi in db.FOIs on area.Interest_Code equals foi.Area_of_Interest_Code where foi.FOI_Ref == id select new { area.Interest_Code }).FirstOrDefault();
+            var status_description = (from status in db.Ref_Status join foi in db.FOIs on status.Status_Code equals foi.Status_Code where foi.FOI_Ref == id select new { status.Status_Code }).FirstOrDefault();
+            ViewBag.Area_of_Interest_Code = new SelectList(db.Ref_Area_of_Interest.Where(a => a.Active == true).OrderBy(a => a.Area_of_Interest), "Interest_Code", "Area_of_Interest", area_description.Interest_Code);
+            ViewBag.Status_Code = new SelectList(db.Ref_Status.Where(s => s.Active == true).OrderBy(s => s.Status_Description), "Status_Code", "Status_Description",status_description.Status_Code);
+
+        
             ViewBag.NewDepartment = new SelectList(db.Ref_Department, "Department_Code", "Department");
             var foiDept = from dep in db.FOI_Department
                           join deptref in db.Ref_Department on dep.Department_Code equals deptref.Department_Code
@@ -417,41 +424,18 @@ namespace FOI_Log.Controllers
 
             ViewBag.Department = foiDept.Select(x => x.DepartmentName).ToList();
 
-            //ViewBag.Department = db.FOI_Department.Where(f => f.FOI_Ref == id).Select(f=>f.Department_Code).ToList();
-            //foreach (var prodGrouping in foiDept)
-            //{
-
-            //    ViewBag.Department += prodGrouping.DepartmentName;
-            //}
-
+          
             return View(fOI);
         }
 
        
         [HttpPost]
-        public ActionResult FOIEdit([Bind(Include = "FOI_Ref,FOI_Received,NGH_FOI_REF,First_IG_Team_Chase,Information_Received_From_Department,Response_Sent_to_Requestor,Association_or_Previous_Request,Requestor_Name,Requestor_Email,Information_Sought,Comments,Status_Code,Area_of_Interest_Code,Created_By,Created_Date,Updated_By,Updated_Date,Deleted_By,Deleted_Date,Head_DQSP_Approval,DSQP_Approved_Date,Director_Approval,Director_Approval_Date")] FOI fOI, int[] NewDepartment, string submit, string save, int Area_of_Interest_Code, int Status_Code)
+        public ActionResult FOIEdit([Bind(Include = "FOI_Ref,FOI_Received,NGH_FOI_REF,First_IG_Team_Chase,Information_Received_From_Department,Response_Sent_to_Requestor,Association_or_Previous_Request,Requestor_Name,Requestor_Email,Information_Sought,Comments,Status_Code,Area_of_Interest_Code,Created_By,Created_Date,Updated_By,Updated_Date,Deleted_By,Deleted_Date,Head_DQSP_Approval,DSQP_Approved_Date,Director_Approval,Director_Approval_Date,Uploaded_Document_Path")] FOI fOI, int[] NewDepartment, int Area_of_Interest_Code, int Status_Code, string submit, string save)
         {
-           // UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
             ViewBag.FOIInProgressActive = "active";
-            // DisplayCount();
+            DisplayCount();
 
-            //FOI foi = new FOI();
-            //foi.Area_of_Interest_Code = Area_of_Interest_Code;
-            //foi.Status_Code = Status_Code;
-            //foi.FOI_Ref = com.foi.FOI_Ref;
-            //foi.FOI_Received = com.foi.FOI_Received;
-            //foi.NGH_FOI_REF = com.foi.NGH_FOI_REF;
-            //foi.First_IG_Team_Chase = com.foi.First_IG_Team_Chase;
-            //foi.Information_Received_From_Department = com.foi.Information_Received_From_Department;
-            //foi.Response_Sent_to_Requestor = com.foi.Response_Sent_to_Requestor;
-            //foi.Requestor_Name = com.foi.Requestor_Name;
-            //foi.Requestor_Email = com.foi.Requestor_Email;
-            //foi.Comments = com.foi.Comments;
-            //foi.Association_or_Previous_Request = com.foi.Association_or_Previous_Request;
-            //foi.Response_Sent_to_Requestor = com.foi.Response_Sent_to_Requestor;
-            //foi.Created_By = com.foi.Created_By;
-            //foi.Created_Date = com.foi.Created_Date;
-            //foi.Updated_Date = DateTime.Now;
             fOI.Updated_Date = DateTime.Now;
             if (save != null)
             {
@@ -462,10 +446,18 @@ namespace FOI_Log.Controllers
                 fOI.Completed_Flag = true;
 
             }
-            //  fOI.Updated_By = user.DisplayName;
             fOI.Area_of_Interest_Code = Area_of_Interest_Code;
             fOI.Status_Code = Status_Code;
-            db.Entry(fOI).State = EntityState.Modified;
+            fOI.Updated_By = user.DisplayName;
+
+            db.FOIs.Attach(fOI);
+            db.Entry(fOI).Property("Completed_Flag").IsModified = true;
+            db.Entry(fOI).Property("Comments").IsModified = true;
+            db.Entry(fOI).Property("Response_Sent_to_Requestor").IsModified = true;
+            db.Entry(fOI).Property("Area_of_Interest_Code").IsModified = true;
+            db.Entry(fOI).Property("Status_Code").IsModified = true;
+            db.Entry(fOI).Property("Updated_Date").IsModified = true;
+            db.Entry(fOI).Property("Updated_By").IsModified = true;
 
             db.SaveChanges();
 
@@ -494,7 +486,6 @@ namespace FOI_Log.Controllers
 
                     due_date = db.FOI_Department.Where(a => a.FOI_Ref == foi_ref && a.Department_Code == d).FirstOrDefault();
 
-                    // dep = db.Ref_Department.Where(f=>f.Department == d).FirstOrDefault();
                     m_email = db.Ref_Department_Managers_Email.Where(m => m.Department_Code == d).ToList();
                     var To_Email = "";
 
@@ -547,8 +538,8 @@ namespace FOI_Log.Controllers
         {
             DisplayCount();
             var fOIs = db.FOIs.Where(f=>f.Completed_Flag==false || f.Completed_Flag==null).ToList();
-            ViewBag.Area_of_Interest_Code = new SelectList(db.Ref_Area_of_Interest.OrderBy(a => a.Area_of_Interest), "Interest_Code", "Area_of_Interest");
-            ViewBag.Status_Code = new SelectList(db.Ref_Status.OrderBy(s => s.Status_Description), "Status_Code", "Status_Description");
+            ViewBag.Area_of_Interest_Code = new SelectList(db.Ref_Area_of_Interest.Where(a=>a.Active==true).OrderBy(a => a.Area_of_Interest), "Interest_Code", "Area_of_Interest");
+            ViewBag.Status_Code = new SelectList(db.Ref_Status.Where(s=>s.Active==true).OrderBy(s => s.Status_Description), "Status_Code", "Status_Description");
             return View(fOIs);
         }
     }

@@ -25,6 +25,7 @@ namespace FOI_Log.Models
         [Display(Name = "FOI Reference")]
         public int FOI_Ref { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+       // [Required]
         [Display(Name = "FOI Received Date")]
         public Nullable<System.DateTime> FOI_Received { get; set; }
         [Display(Name = "NGH FOI Reference")]
@@ -40,18 +41,23 @@ namespace FOI_Log.Models
         [Display(Name = "Association or Previous Request")]
         public string Association_or_Previous_Request { get; set; }
         [Display(Name = "Requestor Name")]
+       // [Required]
         public string Requestor_Name { get; set; }
         [Display(Name = "Requestor Email")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Requestor_Email { get; set; }
         [AllowHtml]
         [Display(Name = "Information Sought")]
+     //   [Required]
         public string Information_Sought { get; set; }
         [Display(Name = "Comments")]
         public string Comments { get; set; }
         [Display(Name = "Status Code")]
+      //  [Required]
         public Nullable<int> Status_Code { get; set; }
         [Display(Name = "Area of Interest Code")]
+        //  [Required]
+        
         public Nullable<int> Area_of_Interest_Code { get; set; }
         [Display(Name = "Created By")]
         public string Created_By { get; set; }
@@ -85,7 +91,7 @@ namespace FOI_Log.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Date Department Due To Respond")]
         public Nullable<System.DateTime> Date_Department_Due_To_Respond { get; set; }
-        [Display(Name = "Uploaded Document")]
+        [Display(Name = "Attached Document")]
         public string Uploaded_Document_Path { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

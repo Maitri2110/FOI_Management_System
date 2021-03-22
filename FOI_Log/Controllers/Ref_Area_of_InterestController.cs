@@ -19,24 +19,26 @@ namespace FOI_Log.Controllers
         public void DisplayCount()
         {
 
-            //UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
-            //ViewBag.givenname = user.GivenName + " " + user.Surname;
-            //ViewBag.FOIInProgress = db.FOIs.Where(x => x.Completed_Flag == false).Count();
-            //ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+            ViewBag.givenname = user.GivenName + " " + user.Surname;
+            ViewBag.FOIInProgress = db.FOIs.Where(x => x.Completed_Flag == false).Count();
+            ViewBag.FOICompleted = db.FOIs.Where(x => x.Completed_Flag == true || x.Completed_Flag == null).Count();
         }
 
         // GET: Ref_Area_of_Interest
         public ActionResult Index()
         {
             ViewBag.AreOfInterestActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
-            return View(db.Ref_Area_of_Interest.ToList());
+            return View(db.Ref_Area_of_Interest.Where(s => s.Active == true).ToList());
         }
 
         // GET: Ref_Area_of_Interest/Details/5
         public ActionResult Details(int? id)
         {
             ViewBag.AreOfInterestActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -54,6 +56,7 @@ namespace FOI_Log.Controllers
         public ActionResult Create()
         {
             ViewBag.AreOfInterestActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             return View();
         }
@@ -63,10 +66,9 @@ namespace FOI_Log.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Interest_Code,Area_of_Interest")] Ref_Area_of_Interest ref_Area_of_Interest)
+        public ActionResult Create([Bind(Include = "Interest_Code,Area_of_Interest,Active")] Ref_Area_of_Interest ref_Area_of_Interest)
         {
-            ViewBag.AreOfInterestActive = "active";
-            DisplayCount();
+            ref_Area_of_Interest.Active = true;
             if (ModelState.IsValid)
             {
                 db.Ref_Area_of_Interest.Add(ref_Area_of_Interest);
@@ -81,6 +83,7 @@ namespace FOI_Log.Controllers
         public ActionResult Edit(int? id)
         {
             ViewBag.AreOfInterestActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -99,10 +102,10 @@ namespace FOI_Log.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Interest_Code,Area_of_Interest")] Ref_Area_of_Interest ref_Area_of_Interest)
+        public ActionResult Edit([Bind(Include = "Interest_Code,Area_of_Interest,Active")] Ref_Area_of_Interest ref_Area_of_Interest)
         {
-            ViewBag.AreOfInterestActive = "active";
             DisplayCount();
+            ref_Area_of_Interest.Active = true;
             if (ModelState.IsValid)
             {
                 db.Entry(ref_Area_of_Interest).State = EntityState.Modified;
@@ -113,9 +116,10 @@ namespace FOI_Log.Controllers
         }
 
         // GET: Ref_Area_of_Interest/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Archive(int? id)
         {
             ViewBag.AreOfInterestActive = "active";
+            ViewBag.Show = "show";
             DisplayCount();
             if (id == null)
             {
@@ -130,14 +134,14 @@ namespace FOI_Log.Controllers
         }
 
         // POST: Ref_Area_of_Interest/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult ArchiveConfirmed(int id)
         {
-            ViewBag.AreOfInterestActive = "active";
             DisplayCount();
             Ref_Area_of_Interest ref_Area_of_Interest = db.Ref_Area_of_Interest.Find(id);
-            db.Ref_Area_of_Interest.Remove(ref_Area_of_Interest);
+            ref_Area_of_Interest.Active = false;
+            db.Entry(ref_Area_of_Interest).Property("Active").IsModified = true;
             db.SaveChanges();
             return RedirectToAction("Index");
         }

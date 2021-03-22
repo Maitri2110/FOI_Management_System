@@ -4,28 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOI</title>
-    @* @Styles.Render("~/Content/css")*@
-    @*  @Scripts.Render("~/bundles/modernizr")*@
-    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">*@
-    <!-- Our Custom CSS -->
+
+
     <link rel="stylesheet" href="~/Content/bootstrape1.css">
-  
+
     <link href="~/Content/style4.css" rel="stylesheet" />
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    <!-- jQuery UI CSS Reference -->
-    <!-- Required jQuery and jQuery UI Javascript references -->
 
 </head>
 <body>
     <div class="wrapper">
 
-        <nav id="sidebar" >
+        <nav id="sidebar">
             <div class="sidebar-header">
                 <span style="font-size:12px;">Welcome, @ViewBag.givenname</span>
-               
+
             </div>
 
             <ul class="list-unstyled components">
@@ -44,7 +40,7 @@
                     </a>
 
                 </li>
-                <li class="@ViewBag.CompletedActive">
+                <li class="@ViewBag.FOICompletedActive">
                     <a href="~/CombinedModel/CompletedFOIList">
                         <i class="fas fa-copy"></i>
                         Completed FOIs (@ViewBag.FOICompleted)
@@ -67,8 +63,8 @@
                         Admin Panel
                         <i class="fas fa-caret-down" style="text-align:right"></i>
                     </a>
-                    
-                    <ul class="list-unstyled collapse" id="pageSubmenu" @*style="display:none;"*@>
+
+                    <ul class="list-unstyled collapse @ViewBag.Show" id="pageSubmenu" @*style="display:none;"*@>
                         <li class="@ViewBag.DepartmentActive">
 
                             <a href="~/Ref_Department/Index">
@@ -98,7 +94,7 @@
                 </li>
             </ul>
         </nav>
-      
+
         <div id="content">
             <div class="navbar navbar-inverse navbar-fixed-top" @*style="background-color: #005EB8;"*@>
                 <div class="container-fluid">
@@ -110,9 +106,10 @@
 
                         @Html.ActionLink("Freedom Of Information Management Tool", "Index", "Home", new { area = "" }, new
                         {
-                            @class = "navbar-brand"})
+                            @class = "navbar-brand"
+                        })
                     </div>
-                  
+
                     <img style="width: 175px;float:right" src="@Url.Content("~/Content/images/NGHLogo-Cropped-277x70.png")" alt="Card image cap">
 
                 </div>
@@ -148,17 +145,17 @@
 
 
     @*<script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js")"></script>
-    <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>*@
+        <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.min.js")"></script>*@
     @*<script type="text/javascript">
-        $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
+            $(document).ready(function () {
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar').toggleClass('active');
+                });
+                $('#Collapse').on('click', function () {
+                    $('#pageSubmenu').toggleClass('collapse');
+                });
             });
-            $('#Collapse').on('click', function () {
-                $('#pageSubmenu').toggleClass('collapse');
-            });
-        });
-    </script>*@
+        </script>*@
     <script>
         $(document).ready(function () {
 
@@ -173,14 +170,14 @@
         function majorpointsexpand(expand) {
             if (expand == "Admin Panel") {
                 $('#data').css("display", "inherit");
-               
+
             }
             else {
                 $('#data').css("display", "none");
-                
+
             }
         }
-        
+
     </script>
     @functions {
         public static string IsCurrentPage(string page)
